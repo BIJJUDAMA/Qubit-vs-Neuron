@@ -1,0 +1,30 @@
+# Python virtual environments & bytecode
+.venv/
+env/
+venv/
+__pycache__/
+*.py[cod]
+*$py.class
+.pytest_cache/
+
+# LaTeX compilation intermediates (keep final PDFs case_study.pdf and case_stud.pdf)
+*.aux
+*.log
+*.out
+*.synctex.gz
+*.xdv
+*.toc
+*.fls
+*.fdb_latexmk
+
+# Local tools & standalone binaries (downloaded on demand)
+tools/tectonic*
+tools/*.zip
+tools/*.tar.gz
+
+# OS specific files
+.DS_Store
+Thumbs.db
+
+# Cloned datasets
+QDataSet/
