@@ -1,0 +1,86 @@
+\documentclass[10pt,a4paper]{article}
+
+\usepackage[margin=0.78in,headheight=14pt]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage{microtype}
+\usepackage{amsmath,amssymb,mathtools}
+\usepackage{graphicx}
+\usepackage{booktabs,tabularx,array}
+\usepackage{siunitx}
+\usepackage{caption}
+\usepackage{float}
+\usepackage{enumitem}
+\usepackage{fancyhdr}
+\usepackage{titlesec}
+\usepackage{xcolor}
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta,positioning,calc,fit,shapes.geometric}
+\usepackage{hyperref}
+\hypersetup{colorlinks=true,linkcolor=black,citecolor=black,urlcolor=black,pdfauthor={Case Study Report},pdftitle={Comparing a Variational Quantum Classifier and a Classical Neural Network}}
+\urlstyle{same}
+\setlength{\parindent}{1em}
+\setlength{\parskip}{3pt}
+\setlist[itemize]{leftmargin=1.4em,itemsep=2pt,topsep=2pt}
+\setlist[enumerate]{leftmargin=1.6em,itemsep=2pt,topsep=2pt}
+\emergencystretch=1.6em
+\renewcommand{\familydefault}{\rmdefault}
+\titleformat{\section}{\large\bfseries}{\thesection.}{0.55em}{}
+\titleformat{\subsection}{\normalsize\bfseries}{\thesubsection}{0.55em}{}
+\titlespacing*{\section}{0pt}{10pt}{4pt}
+\titlespacing*{\subsection}{0pt}{7pt}{3pt}
+\captionsetup{font=small,labelfont=bf,skip=4pt}
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\small QNN vs Classical Neural Network}
+\fancyhead[R]{\small Case Study}
+\fancyfoot[C]{\thepage}
+\renewcommand{\headrulewidth}{0.4pt}
+\renewcommand{\footrulewidth}{0pt}
+\sisetup{detect-all,round-mode=places,round-precision=3}
+
+\definecolor{qblue}{HTML}{D7E8F7}
+\definecolor{qteal}{HTML}{D4EEE5}
+\definecolor{qgold}{HTML}{F8E7BD}
+\definecolor{qcoral}{HTML}{F7DCD5}
+\definecolor{qink}{HTML}{263746}
+\definecolor{qline}{HTML}{637789}
+\tikzset{
+  arch/.style={draw=qline,rounded corners=3pt,thick,align=center,minimum height=0.72cm,inner sep=5pt,text width=2.55cm},
+  gate/.style={draw=qline,rounded corners=2pt,fill=qblue,thick,align=center,minimum width=1.12cm,minimum height=0.54cm,font=\small},
+  wire/.style={draw=qink,thick},
+  arrow/.style={-{Latex[length=2.2mm]},draw=qline,thick}
+}
+
+% Direct dynamic data linkage from pipeline execution
+\IfFileExists{results/results_macros.tex}{\input{results/results_macros.tex}}{}
+
+\begin{document}
+\begin{titlepage}
+\thispagestyle{empty}
+\vspace*{0.2in}
+\begin{center}
+{\Large\bfseries A Comparative Case Study of Quantum and Classical Neural Networks}\par
+\vspace{0.12in}
+{\large Variational Quantum Classifier vs PyTorch Multilayer Perceptron}\par
+\vspace{0.12in}
+{\normalsize Empirical benchmarks on Iris, Two Moons, Concentric Circles, and QDataSet Quantum Dynamics with theoretical advantage frontiers}\par
+\vspace{0.15in}
+\rule{0.70\linewidth}{0.5pt}\par
+\vspace{0.12in}
+{\normalsize Case Study Report \textbullet\ October 2026}\par
+{\small Prepared by: \underline{\hspace{2.2in}}}\par
+\end{center}
+
+\input{sections/00_abstract.tex}
+\end{titlepage}
+
+\input{sections/01_introduction.tex}
+\input{sections/02_related_work.tex}
+\input{sections/03_experimental_design.tex}
+\input{sections/04_models.tex}
+\input{sections/05_results.tex}
+\input{sections/06_limitations.tex}
+\input{sections/07_conclusion.tex}
+
+\end{document}
