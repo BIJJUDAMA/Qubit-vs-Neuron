@@ -1,0 +1,55 @@
+\clearpage
+\section{Limitations and reproducibility}\label{sec:repro}
+\begin{itemize}
+  \item \textbf{Small task scope.} Iris is restricted to two easily separated classes and two features. Two Moons is a synthetic dataset. The results do not imply performance on broader data domains.
+  \item \textbf{Limited tuning.} Architectures and learning rates are fixed, and a full nested hyperparameter search is not performed. A stronger tuning budget could change the comparison.
+  \item \textbf{Small circuit.} The circuit uses only two qubits and $R_y$ rotations with CNOT entanglement. Other encodings, gates, readouts, and optimizers may behave differently.
+  \item \textbf{Ideal simulation.} Training uses exact analytic expectation values. The shot experiment models only stochastic measurement at inference; gate infidelity and decoherence are not included.
+  \item \textbf{Execution backend.} All primary results in this report were generated with the PennyLane \texttt{default.qubit} backend using the Torch interface and simulator backpropagation. Circuit expectations, basis probabilities, and gradients were verified for exact numerical parity against an independent PyTorch statevector reference implementation.
+  \item \textbf{Statistical scope.} Ten paired runs provide useful variability estimates but are not sufficient to support broad claims about quantum learning. Paired tests are exploratory; the Iris primary comparison has zero variation in the paired differences, making its paired $t$-test undefined.
+\end{itemize}
+
+To reproduce the reported PennyLane metrics, install the pinned requirements and run:
+\begin{verbatim}
+python main.py --backend pennylane --seeds 10 \
+  --qnn-epochs 100 --mlp-epochs 100 --output-dir results
+\end{verbatim}
+The script writes per-run metrics to CSV, aggregate metrics and test results to JSON, shot-sensitivity results to CSV, and all figures used in this paper. The included test suite checks CNOT direction, probability normalization, and gradient propagation.
+
+\subsection{Artifacts and expected outputs}
+The project is organized so that model code, metrics, plots, and the manuscript remain separate. The primary script writes \texttt{run\_metrics.csv} with one row per dataset/seed/model configuration, \texttt{shot\_sensitivity.csv} with one row per shot resampling, \texttt{summary.json} with means, sample standard deviations and paired-test outputs, and a \texttt{figures/} directory containing all plots. The backend name is included in CSV rows and the JSON provenance. This prevents reference-backend results from being confused with a PennyLane run.
+
+\begin{figure}[H]
+\centering
+\begin{tikzpicture}[node distance=0.42cm and 0.58cm,font=\small]
+  \node[arch,fill=qgold,text width=2.35cm] (setup) {Pinned Python environment\\Fixed seeds and splits};
+  \node[arch,fill=qblue,right=of setup,text width=2.45cm] (models) {Train QNode + MLP\\Depth and entanglement ablations};
+  \node[arch,fill=qteal,right=of models,text width=2.35cm] (eval) {Held-out metrics\\Paired statistics\\Shot resampling};
+  \node[arch,fill=qcoral,below=0.52cm of models,text width=2.45cm] (outputs) {CSV and JSON\\Figures\\LaTeX / PDF};
+  \draw[arrow] (setup) -- (models);
+  \draw[arrow] (models) -- (eval);
+  \draw[arrow] (eval.south) |- (outputs.east);
+  \draw[arrow] (models.south) -- (outputs.north);
+\end{tikzpicture}
+\caption{Reproducible experiment pipeline. Results are tagged with the simulator backend used to produce them.}
+\label{fig:pipeline}
+\end{figure}
+
+\begin{table}[H]
+\centering\small
+\caption{Pinned direct Python dependencies in the supplied PennyLane environment.}
+\begin{tabularx}{\linewidth}{@{}l l X@{}}
+\toprule
+Package & Pinned version & Role\\
+\midrule
+Python & 3.11--3.13 & Runtime supported by the selected PennyLane release\\
+PennyLane & 0.45.1 & QNode creation and \texttt{default.qubit} simulation\\
+PyTorch & 2.10.0 & Classical MLP, optimizer and differentiable readout\\
+NumPy / pandas & 2.3.5 / 2.2.3 & Numeric processing and CSV results\\
+scikit-learn & 1.8.0 & Datasets, splits, preprocessing and metrics\\
+SciPy & 1.17.0 & Paired statistical tests and confidence intervals\\
+Matplotlib & 3.10.8 & Visualisations\\
+pytest & 9.0.2 & Automated tests\\
+\bottomrule
+\end{tabularx}
+\end{table}

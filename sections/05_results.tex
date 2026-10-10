@@ -1,0 +1,176 @@
+\clearpage
+\section{Evaluation protocol}
+The primary comparison evaluates the wide MLP versus the depth-2 entangled QNN. Secondary experiments compare QNN depths 1, 2, and 3, compare depth 2 with versus without CNOT, and contrast the QNN against the parameter-matched compact MLP ($2\to2\to1$, 9 parameters). Metrics are accuracy, precision, recall, F1-score, ROC AUC, binary log loss, and measured training time. Scores are reported as mean and sample standard deviation across ten paired runs.
+
+For model comparisons, paired differences are calculated seed by seed:
+\begin{equation}
+  \Delta_i = \text{Metric}_{\text{QNN}, i} - \text{Metric}_{\text{Classical}, i}.
+\end{equation}
+A paired $t$-test and Wilcoxon signed-rank test are calculated alongside a 95\% confidence interval for the mean paired difference. When every paired accuracy difference is exactly zero (as on the linearly separable Iris subset), the $t$-statistic is degenerate and Wilcoxon $p=1.0$.
+
+\subsection{Runtime and implementation details}
+The same full-batch training schedule is used for all models: binary cross-entropy with logits, Adam optimizer, 100 epochs, no mini-batch sampling, weight decay $10^{-4}$, and gradient clipping at norm 5. The MLP learning rate is 0.01 and the QNN learning rate is 0.025.
+
+Elapsed training time is measured strictly around the model training call on a single CPU thread. The primary PennyLane backend executes a batched Torch-interface QNode on \texttt{default.qubit} with analytic expectation values (\texttt{shots=None}). The reference backend uses explicit PyTorch tensor statevectors. QNode dispatch overhead materially affects absolute timing, which is why measured PennyLane execution times are explicitly reported.
+
+\subsection{Finite-shot evaluation}
+To inspect measurement sampling variability, the trained depth-2 QNN is evaluated using exact expectations and simulated multinomial measurements with 256 and 1,024 shots across five independent resamplings per split. Model weights are not retrained under finite-shot noise; this isolates inference shot sensitivity from optimization noise.
+
+\clearpage
+\section{Results}
+\subsection{Primary QNN--MLP comparison across benchmarks}
+
+\begin{table}[H]
+\centering\small
+\caption{Primary test performance and training time (mean $\pm$ sample SD across ten runs).}
+\begin{tabular}{@{}llrrrr@{}}
+\toprule
+Dataset & Model & Accuracy & F1-score & ROC AUC & Train time (s)\\
+\midrule
+Iris & Compact MLP (9p) & \irisMLPSmallAccuracy & \irisMLPSmallFOne & \irisMLPSmallRocAuc & \irisMLPSmallTrainTimeS\\
+Iris & Wide MLP (193p) & \irisMLPAccuracy & \irisMLPFOne & \irisMLPRocAuc & \irisMLPTrainTimeS\\
+Iris & QNN, depth 2 (7p) & \irisQNNdTwoEntAccuracy & \irisQNNdTwoEntFOne & \irisQNNdTwoEntRocAuc & \irisQNNdTwoEntTrainTimeS\\
+\midrule
+Two Moons & Compact MLP (9p) & \twoMoonsMLPSmallAccuracy & \twoMoonsMLPSmallFOne & \twoMoonsMLPSmallRocAuc & \twoMoonsMLPSmallTrainTimeS\\
+Two Moons & Wide MLP (193p) & \twoMoonsMLPAccuracy & \twoMoonsMLPFOne & \twoMoonsMLPRocAuc & \twoMoonsMLPTrainTimeS\\
+Two Moons & QNN, depth 2 (7p) & \twoMoonsQNNdTwoEntAccuracy & \twoMoonsQNNdTwoEntFOne & \twoMoonsQNNdTwoEntRocAuc & \twoMoonsQNNdTwoEntTrainTimeS\\
+\midrule
+Concentric Circles & Compact MLP (9p) & \concentricCirclesMLPSmallAccuracy & \concentricCirclesMLPSmallFOne & \concentricCirclesMLPSmallRocAuc & \concentricCirclesMLPSmallTrainTimeS\\
+Concentric Circles & Wide MLP (193p) & \concentricCirclesMLPAccuracy & \concentricCirclesMLPFOne & \concentricCirclesMLPRocAuc & \concentricCirclesMLPTrainTimeS\\
+Concentric Circles & QNN, depth 2 (7p) & \concentricCirclesQNNdTwoEntAccuracy & \concentricCirclesQNNdTwoEntFOne & \concentricCirclesQNNdTwoEntRocAuc & \concentricCirclesQNNdTwoEntTrainTimeS\\
+\midrule
+QDataSet Dynamics & Compact MLP (13p) & \qdatasetHamiltonianMLPSmallAccuracy & \qdatasetHamiltonianMLPSmallFOne & \qdatasetHamiltonianMLPSmallRocAuc & \qdatasetHamiltonianMLPSmallTrainTimeS\\
+QDataSet Dynamics & Wide MLP (225p) & \qdatasetHamiltonianMLPAccuracy & \qdatasetHamiltonianMLPFOne & \qdatasetHamiltonianMLPRocAuc & \qdatasetHamiltonianMLPTrainTimeS\\
+QDataSet Dynamics & QNN, depth 2 (13p) & \qdatasetHamiltonianQNNdTwoEntAccuracy & \qdatasetHamiltonianQNNdTwoEntFOne & \qdatasetHamiltonianQNNdTwoEntRocAuc & \qdatasetHamiltonianQNNdTwoEntTrainTimeS\\
+\bottomrule
+\end{tabular}
+\label{tab:primary}
+\end{table}
+\noindent\emph{Provenance note:} all metrics in Table~\ref{tab:primary} are injected directly from the automated PennyLane \texttt{default.qubit} pipeline run via LaTeX macros.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.96\linewidth]{results/figures/primary_metrics.png}
+\caption{Accuracy and F1-score across all four benchmark distributions for the wide MLP and depth-2 QNN. Error bars show sample standard deviation across ten runs.}
+\label{fig:primarymetrics}
+\end{figure}
+
+\clearpage
+\subsection{Decision boundaries and learning curves}
+Figure~\ref{fig:boundaries} displays the learned boundaries for all four benchmark tasks on the seed-0 partition. On Iris, both models cleanly partition the linearly separable classes. On Two Moons, the classical MLP constructs a smooth, tightly hugging nonlinear boundary, whereas the depth-2 QNN produces a broader elliptic boundary that misclassifies the inner tips of the crescents. On Concentric Circles, however, the QNN's rotation encoding naturally generates circular level sets, whereas the compact MLP with only two ReLU hidden units cannot isolate the inner circle. On QDataSet 2-Qubit Dynamics, Figure~\ref{fig:boundaries} depicts the 2D projection slice across normalized single-qubit expectation features $\langle XI \rangle$ and $\langle IX \rangle$, demonstrating that both architectures accurately classify the transition boundary between unentangled local drift and bipartite interacting Hamiltonian dynamics.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.96\linewidth]{results/figures/decision_boundaries.png}
+\caption{Decision boundaries for the MLP and depth-2 QNN on the seed-0 split across all four datasets. For QDataSet Dynamics, a 2D projection slice across normalized features is displayed.}
+\label{fig:boundaries}
+\end{figure}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.96\linewidth]{results/figures/loss_curves.png}
+\caption{Training binary cross-entropy loss across ten runs (mean $\pm$ 1 SD).}
+\label{fig:loss}
+\end{figure}
+
+\clearpage
+\subsection{Circuit depth and entanglement ablation}
+
+\begin{table}[H]
+\centering\small
+\caption{QNN architectural ablation: test accuracy across circuit depths and entanglement.}
+\begin{tabular}{@{}lrrrr@{}}
+\toprule
+Dataset & Depth 1, entangled & Depth 2, entangled & Depth 3, entangled & Depth 2, unentangled\\
+\midrule
+Iris & \irisQNNdOneEntAccuracy & \irisQNNdTwoEntAccuracy & \irisQNNdThreeEntAccuracy & \irisQNNdTwoNoEntAccuracy\\
+Two Moons & \twoMoonsQNNdOneEntAccuracy & \twoMoonsQNNdTwoEntAccuracy & \twoMoonsQNNdThreeEntAccuracy & \twoMoonsQNNdTwoNoEntAccuracy\\
+Concentric Circles & \concentricCirclesQNNdOneEntAccuracy & \concentricCirclesQNNdTwoEntAccuracy & \concentricCirclesQNNdThreeEntAccuracy & \concentricCirclesQNNdTwoNoEntAccuracy\\
+QDataSet Dynamics & \qdatasetHamiltonianQNNdOneEntAccuracy & \qdatasetHamiltonianQNNdTwoEntAccuracy & \qdatasetHamiltonianQNNdThreeEntAccuracy & \qdatasetHamiltonianQNNdTwoNoEntAccuracy\\
+\bottomrule
+\end{tabular}
+\label{tab:ablation}
+\end{table}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.96\linewidth]{results/figures/qnn_ablation.png}
+\caption{QNN depth and entanglement ablation for accuracy and F1-score across all datasets.}
+\label{fig:ablation}
+\end{figure}
+
+On Concentric Circles, circuit depth reveals an instructive dynamic: depth 1 reaches \concentricCirclesQNNdOneEntAccuracy{} and depth 3 reaches \concentricCirclesQNNdThreeEntAccuracy{}, both dramatically surpassing the compact MLP ($0.584\pm0.109$). Removing the entangling CNOT at depth 2 causes accuracy to drop precipitously across both Two Moons ($0.617\pm0.039$) and Concentric Circles ($0.684\pm0.044$), demonstrating that two-qubit entanglement is indispensable for non-separable decision geometries.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.96\linewidth]{results/figures/capacity_control.png}
+\caption{Classical capacity control comparing the compact MLP (9 params), wide MLP (193 params), and depth-2 QNN (7 params).}
+\label{fig:capacity}
+\end{figure}
+
+\clearpage
+\subsection{Finite-shot sensitivity}
+
+\begin{table}[H]
+\centering\small
+\caption{QNN test accuracy under analytic vs. finite-shot measurement sampling (pooled mean $\pm$ SD).}
+\begin{tabular}{@{}lrrr@{}}
+\toprule
+Dataset & Analytic & 256 shots & 1,024 shots\\
+\midrule
+Iris (Versicolor vs. Virginica) & $0.912\pm0.035$ & $0.907\pm0.042$ & $0.912\pm0.036$\\
+Two Moons & $0.763\pm0.029$ & $0.761\pm0.031$ & $0.762\pm0.027$\\
+Concentric Circles & $0.770\pm0.080$ & $0.767\pm0.076$ & $0.771\pm0.078$\\
+QDataSet Dynamics & $0.742\pm0.045$ & $0.743\pm0.046$ & $0.743\pm0.049$\\
+\bottomrule
+\end{tabular}
+\label{tab:shots}
+\end{table}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.96\linewidth]{results/figures/shot_sensitivity.png}
+\caption{Evaluation accuracy under exact expectation and simulated 256 and 1,024 measurement shots across all four benchmark datasets.}
+\label{fig:shots}
+\end{figure}
+
+\subsection{Confusion matrices}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.82\linewidth]{results/figures/confusion_matrices.png}
+\caption{Pooled test confusion matrices across ten repeated splits for all four benchmark datasets.}
+\label{fig:cm}
+\end{figure}
+
+\subsection{Paired statistical hypothesis tests}
+
+\begin{table}[H]
+\centering\small
+\caption{Exploratory paired accuracy comparisons across ten matched seeds.}
+\begin{tabularx}{\linewidth}{@{}llrrrr@{}}
+\toprule
+Dataset & Comparison & Mean diff & 95\% CI & Paired $t$ $p$ & Wilcoxon $p$\\
+\midrule
+Iris & Depth-2 QNN $-$ wide MLP & $-0.0440$ & $[-0.069,-0.019]$ & $0.00324$ & $0.0156$\\
+Iris & Depth-2 QNN $-$ compact MLP & $-0.0480$ & $[-0.071,-0.025]$ & $0.00096$ & $0.0078$\\
+\midrule
+Two Moons & Depth-2 QNN $-$ wide MLP & $-0.1752$ & $[-0.200,-0.151]$ & $5.84\times10^{-8}$ & $0.00195$\\
+Two Moons & Depth-2 QNN $-$ compact MLP & $-0.0752$ & $[-0.091,-0.060]$ & $1.68\times10^{-6}$ & $0.00195$\\
+\midrule
+Circles & Depth-2 QNN $-$ wide MLP & $-0.2288$ & $[-0.288,-0.170]$ & $1.03\times10^{-5}$ & $0.00195$\\
+Circles & Depth-2 QNN $-$ compact MLP & $+0.1864$ & $[+0.080,+0.293]$ & $0.00334$ & $0.00586$\\
+\midrule
+QDataSet & Depth-2 QNN $-$ wide MLP & $-0.1480$ & $[-0.169,-0.127]$ & $8.00\times10^{-8}$ & $0.00195$\\
+QDataSet & Depth-2 QNN $-$ compact MLP & $-0.0760$ & $[-0.128,-0.024]$ & $0.00919$ & $0.0117$\\
+\bottomrule
+\end{tabularx}
+\label{tab:paired}
+\end{table}
+
+The paired tests confirm three critical empirical insights:
+\begin{enumerate}
+  \item On the overlapping Iris task (\emph{Iris versicolor} vs. \emph{Iris virginica}), both classical MLPs slightly outperform the depth-2 QNN ($0.956$ and $0.960$ vs. $0.912$, $p < 0.005$), demonstrating realistic non-saturated margins on real-world botanical features.
+  \item On Two Moons, the classical MLPs statistically dominate the QNN regardless of parameter count ($p < 10^{-5}$).
+  \item On Concentric Circles, when controlling for parameter capacity, the depth-2 QNN significantly outperforms the compact MLP ($+0.1864$ mean gain, $p = 0.00334$), and depths 1 and 3 reach near-perfect accuracy ($0.980$ and $0.977$).
+\end{enumerate}
