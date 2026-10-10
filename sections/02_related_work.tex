@@ -1,0 +1,30 @@
+\clearpage
+\section{Related work}
+Schuld and Killoran connected quantum learning models with feature maps into Hilbert spaces, formalizing quantum circuits as kernel-style data transformations followed by a measurement-based linear hypothesis [1]. Pérez-Salinas et al. demonstrated that repeatedly encoding classical inputs through multiple circuit layers---termed \emph{data re-uploading}---increases the expressivity of small quantum classifiers, establishing that even single-qubit systems with sufficiently many re-uploading stages can approximate arbitrary continuous functions [2].
+
+Subsequent mathematical foundations revealed that variational quantum circuits act effectively as truncated multidimensional Fourier series [4]:
+\begin{equation}
+  f(x;\theta) = \sum_{\omega \in \Omega} c_\omega(\theta) e^{i \omega^\top x},
+\end{equation}
+where the frequency spectrum $\Omega$ is determined by the spectrum of the encoding generators and the number of re-uploading repetitions. For an $R_y(x)$ encoding layer, each repetition adds integer harmonic frequencies $\{-1, 0, 1\}$. Thus, shallow QNNs operate under strict spectral frequency cutoffs, unlike classical MLPs whose piecewise-linear ReLU activations can compose high-frequency boundary segments with localized support.
+
+Bowles, Ahmed, and Schuld evaluated a wide range of variational quantum classifiers across tabular datasets, demonstrating that standard classical baselines (such as ridge classifiers and shallow neural networks) systematically outperform QML models [3]. Crucially, they observed that quantum entanglement frequently yielded negligible performance improvements and in several instances degraded generalization. Furthermore, McClean et al. proved that random parameterized quantum circuits suffer from the \emph{barren plateau} phenomenon [5], wherein gradient variances vanish exponentially with qubit count ($\text{Var}[\partial_\theta \mathcal{L}] \in \mathcal{O}(2^{-n})$). While our two-qubit investigation avoids exponential barren plateaus, it exposes the subtle interplay between circuit depth, entanglement, and inductive bias.
+
+To address the historical scarcity of standardized quantum machine learning benchmarks, Perrier, Youssry, and Ferrie introduced \emph{QDataSet} [6], a comprehensive open-access repository of quantum datasets specifically curated for quantum machine learning research. QDataSet provides experimentally acquired and simulated quantum dynamics, state tomography data, and quantum state classification tasks across multi-qubit systems. As discussed in Section~\ref{sec:frontiers}, such quantum-native datasets constitute the primary regime where quantum neural networks possess a fundamental advantage over classical architectures by bypassing classical measurement bottlenecks.
+
+\begin{table}[H]
+\centering\small
+\caption{How prior foundational literature informs our experimental and theoretical framework.}
+\begin{tabularx}{\linewidth}{@{}p{0.24\linewidth}p{0.34\linewidth}X@{}}
+\toprule
+Prior direction & Core principle & Role in this study\\
+\midrule
+Quantum feature maps [1] & Unitary feature encoding maps classical inputs into Hilbert space inner products. & Two normalized features mapped to rotation angles on a 2-qubit register.\\
+Data re-uploading [2] & Interleaving data encoding and trainable layers expands reachable hypothesis classes. & Compares depths 1, 2, and 3 to measure expressivity gains versus parameter costs.\\
+Fourier representation [4] & VQCs compute trigonometric Fourier polynomials with bounded frequency spectra. & Explains QNN rotational advantages on circles and boundary limitations on Moons.\\
+Benchmarking rigor [3] & Classical baselines routinely dominate small tabular tasks; entanglement benefits are task-contingent. & Uses matched splits, wide and compact MLPs, paired tests, and entanglement ablations.\\
+Barren plateaus [5] & Expressivity-trainability trade-offs severely limit overparameterization in quantum circuits. & Theoretical basis for why classical MLPs benefit from overparameterization while QNNs cannot.\\
+QDataSet benchmarks [6] & Standardized quantum state and dynamics datasets for benchmarking quantum algorithms. & Establishes quantum-native data standards where QNNs eliminate tomography overheads.\\
+\bottomrule
+\end{tabularx}
+\end{table}

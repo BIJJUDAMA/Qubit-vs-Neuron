@@ -1,0 +1,28 @@
+\clearpage
+\section{Experimental design}
+\subsection{Datasets}
+\begin{table}[H]
+\centering\small
+\caption{Benchmark datasets used in the controlled evaluation.}
+\begin{tabularx}{\linewidth}{@{}l l X@{}}
+\toprule
+Dataset & Size and classes & Geometric structure and benchmarking rationale\\
+\midrule
+Iris subset & 100 samples; 50 per class & Petal length and width comparing \emph{Iris versicolor} vs. \emph{Iris virginica} (\texttt{target > 0}). This provides an overlapping, non-trivial real-data benchmark that avoids saturation artifacts.\\
+Two Moons & 500 samples; 2 classes & Interleaving curved crescent clusters with noise $\sigma=0.25$. Tests the capacity to approximate irregular non-convex boundaries.\\
+Concentric Circles & 500 samples; 2 classes & Inner and outer concentric rings (factor 0.5, noise 0.08). Tests rotational inductive bias: challenging for low-parameter MLPs ($2\to2\to1$), but directly matched to trigonometric quantum rotation encodings.\\
+QDataSet Dynamics & 500 samples; 2 classes & Physical time-dependent Hamiltonian dynamics of a 2-qubit register evolving under single-qubit drift fields and Gaussian controls (Perrier et al., 2022 \cite{perrier2022qdataset}). Classifies separable local dynamics ($g_{\text{int}}=0$) vs. entangling interaction dynamics ($g_{\text{int}} > 0$) from observable Pauli expectations ($\langle XI \rangle, \langle IX \rangle, \langle XX \rangle, \langle ZZ \rangle$).\\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+The Iris data are loaded from scikit-learn, retaining versicolor and virginica to construct a realistic overlapping classification boundary. For Two Moons, Concentric Circles, and QDataSet 2-Qubit Dynamics, 500-sample datasets are generated dynamically for each of the ten seeds using deterministic random seeds ($2026+\text{seed}$). For each seed, all competing models share the exact same stratified 75/25 train/test partition.
+
+\subsection{Preprocessing and split protocol}
+The standard scaler is fitted using only the training samples and subsequently applied to held-out test data. The classical MLPs receive standardized continuous features $z \in \mathbb{R}^d$. For the quantum circuit, each standardized feature $z_i$ is mapped to a rotation angle:
+\begin{equation}
+  x_i^{(q)} = \pi\,\operatorname{clip}\!\left(\frac{z_i}{2.5},-1,1\right).
+\end{equation}
+This bounds inputs strictly to $[-\pi,\pi]$, preventing angle overflow and ensuring uniform phase coverage across the Bloch sphere.
+
+Ten random seeds (0--9) are evaluated. Within each seed, the MLP and every QNN configuration receive identical training and test splits. The seed dictates the train/test partition, the dataset generation for synthetic tasks, and reproducible initialization offsets. Because the exact same data realization and partition are used by all models at a given seed, each primary comparison is paired by seed.
