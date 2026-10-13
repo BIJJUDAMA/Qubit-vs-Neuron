@@ -42,10 +42,15 @@
 \renewcommand{\topfraction}{0.90}
 \renewcommand{\bottomfraction}{0.85}
 \renewcommand{\textfraction}{0.08}
-\renewcommand{\floatpagefraction}{0.80}
-\setlength{\floatsep}{8pt plus 2pt minus 2pt}
-\setlength{\textfloatsep}{10pt plus 2pt minus 3pt}
-\setlength{\intextsep}{8pt plus 2pt minus 2pt}
+\renewcommand{\floatpagefraction}{0.75}
+\setlength{\floatsep}{6pt plus 2pt minus 2pt}
+\setlength{\textfloatsep}{8pt plus 2pt minus 2pt}
+\setlength{\intextsep}{6pt plus 2pt minus 2pt}
+
+% Enlarge displayed equations and formulas for enhanced readability
+\DeclareMathSizes{10}{11.5}{8.5}{6.5}
+\setlength{\jot}{6pt}
+\everydisplay{\textstyle}
 
 \definecolor{qblue}{HTML}{D7E8F7}
 \definecolor{qteal}{HTML}{D4EEE5}

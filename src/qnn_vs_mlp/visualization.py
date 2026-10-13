@@ -64,10 +64,10 @@ def plot_metrics(summary_df: pd.DataFrame, output_dir: Path) -> None:
     display_names = {
         "iris": "Iris",
         "two_moons": "Two Moons",
-        "concentric_circles": "Concentric Circles",
-        "qdataset_hamiltonian": "QDataSet Dynamics"
+        "concentric_circles": "Circles",
+        "qdataset_hamiltonian": "QDataSet"
     }
-    fig, axes = plt.subplots(1, 2, figsize=(14.0, 5.2), constrained_layout=True)
+    fig, axes = plt.subplots(1, 2, figsize=(14.0, 5.4), constrained_layout=True)
     for ax, metric, title in zip(axes, ["accuracy", "f1"], ["Test Accuracy", "Test F1-Score"]):
         categories = []
         labels = []
@@ -86,14 +86,14 @@ def plot_metrics(summary_df: pd.DataFrame, output_dir: Path) -> None:
             vals.append(sub.mean() if not sub.empty else 0.0)
             errs.append(sub.std() if len(sub) > 1 and np.isfinite(sub.std()) else 0.0)
         x = np.arange(len(categories))
-        bars = ax.bar(x, vals, yerr=errs, capsize=4, color=colors, edgecolor="#303030", linewidth=0.8)
-        ax.set_xticks(x, labels, fontsize=10, fontweight="medium")
+        bars = ax.bar(x, vals, yerr=errs, capsize=4, color=colors, edgecolor="#303030", linewidth=0.8, width=0.68)
+        ax.set_xticks(x, labels, fontsize=11, fontweight="medium")
         ax.set_ylim(0, 1.08)
-        ax.set_ylabel("Score", fontsize=12, fontweight="bold")
-        ax.set_title(title, fontsize=13, fontweight="bold", pad=8)
+        ax.set_ylabel("Score", fontsize=13, fontweight="bold")
+        ax.set_title(title, fontsize=14, fontweight="bold", pad=10)
         ax.tick_params(axis="y", labelsize=11)
         ax.grid(axis="y", alpha=0.30)
-    fig.suptitle("Primary Benchmark: Wide MLP vs Variational QNN (10 Paired Splits)", fontsize=15, fontweight="bold")
+    fig.suptitle("Primary Benchmark: Wide MLP vs Variational QNN (10 Paired Splits)", fontsize=16, fontweight="bold")
     fig.savefig(output_dir / "primary_metrics.png", dpi=250, bbox_inches="tight")
     plt.close(fig)
 
@@ -204,17 +204,15 @@ def plot_ablation(results_df: pd.DataFrame, output_dir: Path) -> None:
 
 
 def plot_loss_curves(histories: Dict[Tuple[str, str], List[List[float]]], output_dir: Path) -> None:
-    datasets = sorted(list(set(k[0] for k in histories.keys())))
+    datasets = ['iris', 'two_moons', 'concentric_circles', 'qdataset_hamiltonian']
     display_names = {
         "iris": "Iris",
         "two_moons": "Two Moons",
         "concentric_circles": "Concentric Circles",
         "qdataset_hamiltonian": "QDataSet Dynamics"
     }
-    fig, axes = plt.subplots(1, len(datasets), figsize=(4.2 * len(datasets), 4.5), constrained_layout=True)
-    if len(datasets) == 1:
-        axes = [axes]
-    for ax, dataset in zip(axes, datasets):
+    fig, axes = plt.subplots(2, 2, figsize=(11.0, 8.0), constrained_layout=True)
+    for ax, dataset in zip(axes.flat, datasets):
         for config, color, label in [
             ("MLP", "#5176A8", "Wide Classical MLP"),
             ("QNN_depth2_entangled", "#D98E32", "Variational Quantum Classifier"),
@@ -226,16 +224,16 @@ def plot_loss_curves(histories: Dict[Tuple[str, str], List[List[float]]], output
             mean = arr.mean(axis=0)
             sd = arr.std(axis=0)
             epochs = np.arange(1, arr.shape[1] + 1)
-            ax.plot(epochs, mean, color=color, label=label, linewidth=2.0)
+            ax.plot(epochs, mean, color=color, label=label, linewidth=2.2)
             ax.fill_between(epochs, np.maximum(0, mean - sd), mean + sd, color=color, alpha=0.18)
         d_name = display_names.get(dataset, dataset.replace("_", " ").title())
-        ax.set_title(d_name, fontsize=12, fontweight="bold", pad=8)
-        ax.set_xlabel("Epoch", fontsize=11)
+        ax.set_title(d_name, fontsize=13, fontweight="bold", pad=8)
+        ax.set_xlabel("Epoch", fontsize=11, fontweight="medium")
         ax.set_ylabel("Training BCE Loss", fontsize=11, fontweight="bold")
         ax.tick_params(axis="both", labelsize=10)
         ax.grid(alpha=0.25)
-        ax.legend(frameon=True, facecolor="white", edgecolor="#cccccc", fontsize=9)
-    fig.suptitle("Empirical Convergence & Optimization Trajectories Across Data Geometries", fontsize=14, fontweight="bold")
+        ax.legend(frameon=True, facecolor="white", edgecolor="#cccccc", fontsize=10)
+    fig.suptitle("Empirical Convergence & Optimization Trajectories Across Data Geometries", fontsize=15, fontweight="bold")
     fig.savefig(output_dir / "loss_curves.png", dpi=250, bbox_inches="tight")
     plt.close(fig)
 

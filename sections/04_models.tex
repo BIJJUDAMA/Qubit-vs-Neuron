@@ -16,40 +16,40 @@ This establishes a hybrid quantum-classical pipeline: the PennyLane QNode comput
 
 \begin{figure}[!htbp]
 \centering
-\begin{tikzpicture}[x=1cm,y=1cm,font=\small]
+\begin{tikzpicture}[x=1.35cm,y=1.28cm,font=\normalsize]
   % Qubit wires
-  \draw[wire] (0,1) -- (9.45,1);
-  \draw[wire] (0,0) -- (9.45,0);
-  \node[anchor=east] at (-0.08,1) {$q_0:|0\rangle$};
-  \node[anchor=east] at (-0.08,0) {$q_1:|0\rangle$};
+  \draw[wire,line width=1.1pt] (0,1) -- (9.45,1);
+  \draw[wire,line width=1.1pt] (0,0) -- (9.45,0);
+  \node[anchor=east,font=\large\bfseries] at (-0.12,1) {$q_0:|0\rangle$};
+  \node[anchor=east,font=\large\bfseries] at (-0.12,0) {$q_1:|0\rangle$};
   % Layer 1 encoding
-  \node[gate,fill=qblue] at (0.95,1) {$R_y(x_0)$};
-  \node[gate,fill=qblue] at (0.95,0) {$R_y(x_1)$};
-  \node[gate,fill=qgold] at (2.42,1) {$R_y(\theta_{10})$};
-  \node[gate,fill=qgold] at (2.42,0) {$R_y(\theta_{11})$};
-  \fill[qink] (3.52,1) circle (2.1pt);
-  \draw[qink,thick] (3.52,1) -- (3.52,0);
-  \draw[qink,thick,fill=white] (3.52,0) circle (4.3pt);
-  \draw[qink,thick] (3.52,-0.075) -- (3.52,0.075);
-  \draw[qink,thick] (3.445,0) -- (3.595,0);
+  \node[gate,fill=qblue,minimum width=1.35cm,minimum height=0.68cm,font=\normalsize] at (0.95,1) {$R_y(x_0)$};
+  \node[gate,fill=qblue,minimum width=1.35cm,minimum height=0.68cm,font=\normalsize] at (0.95,0) {$R_y(x_1)$};
+  \node[gate,fill=qgold,minimum width=1.35cm,minimum height=0.68cm,font=\normalsize] at (2.42,1) {$R_y(\theta_{10})$};
+  \node[gate,fill=qgold,minimum width=1.35cm,minimum height=0.68cm,font=\normalsize] at (2.42,0) {$R_y(\theta_{11})$};
+  \fill[qink] (3.52,1) circle (2.6pt);
+  \draw[qink,line width=1.2pt] (3.52,1) -- (3.52,0);
+  \draw[qink,line width=1.2pt,fill=white] (3.52,0) circle (5.5pt);
+  \draw[qink,line width=1.2pt] (3.52,-0.10) -- (3.52,0.10);
+  \draw[qink,line width=1.2pt] (3.42,0) -- (3.62,0);
   % Layer 2 encoding
-  \node[gate,fill=qblue] at (4.55,1) {$R_y(x_0)$};
-  \node[gate,fill=qblue] at (4.55,0) {$R_y(x_1)$};
-  \node[gate,fill=qgold] at (6.02,1) {$R_y(\theta_{20})$};
-  \node[gate,fill=qgold] at (6.02,0) {$R_y(\theta_{21})$};
-  \fill[qink] (7.12,1) circle (2.1pt);
-  \draw[qink,thick] (7.12,1) -- (7.12,0);
-  \draw[qink,thick,fill=white] (7.12,0) circle (4.3pt);
-  \draw[qink,thick] (7.12,-0.075) -- (7.12,0.075);
-  \draw[qink,thick] (7.045,0) -- (7.195,0);
+  \node[gate,fill=qblue,minimum width=1.35cm,minimum height=0.68cm,font=\normalsize] at (4.55,1) {$R_y(x_0)$};
+  \node[gate,fill=qblue,minimum width=1.35cm,minimum height=0.68cm,font=\normalsize] at (4.55,0) {$R_y(x_1)$};
+  \node[gate,fill=qgold,minimum width=1.35cm,minimum height=0.68cm,font=\normalsize] at (6.02,1) {$R_y(\theta_{20})$};
+  \node[gate,fill=qgold,minimum width=1.35cm,minimum height=0.68cm,font=\normalsize] at (6.02,0) {$R_y(\theta_{21})$};
+  \fill[qink] (7.12,1) circle (2.6pt);
+  \draw[qink,line width=1.2pt] (7.12,1) -- (7.12,0);
+  \draw[qink,line width=1.2pt,fill=white] (7.12,0) circle (5.5pt);
+  \draw[qink,line width=1.2pt] (7.12,-0.10) -- (7.12,0.10);
+  \draw[qink,line width=1.2pt] (7.02,0) -- (7.22,0);
   % Measurements
-  \node[draw=qline,rounded corners=2pt,fill=qteal,minimum width=0.82cm,minimum height=0.50cm] at (8.25,1) {$\langle Z_0\rangle$};
-  \node[draw=qline,rounded corners=2pt,fill=qteal,minimum width=0.82cm,minimum height=0.50cm] at (8.25,0) {$\langle Z_1\rangle$};
-  \node[draw=qline,rounded corners=2pt,fill=qcoral,minimum width=1.18cm,minimum height=0.86cm,align=center,font=\scriptsize] (readout) at (9.92,0.5) {Linear\\readout\\+ sigmoid};
-  \draw[arrow] (8.68,1) -- (readout.west |- 0,0.72);
-  \draw[arrow] (8.68,0) -- (readout.west |- 0,0.28);
-  \node[font=\scriptsize,align=center] at (2.4,1.55) {Layer 1};
-  \node[font=\scriptsize,align=center] at (6.0,1.55) {Layer 2};
+  \node[draw=qline,rounded corners=2pt,fill=qteal,line width=1.0pt,minimum width=1.12cm,minimum height=0.66cm,font=\normalsize\bfseries] at (8.25,1) {$\langle Z_0\rangle$};
+  \node[draw=qline,rounded corners=2pt,fill=qteal,line width=1.0pt,minimum width=1.12cm,minimum height=0.66cm,font=\normalsize\bfseries] at (8.25,0) {$\langle Z_1\rangle$};
+  \node[draw=qline,rounded corners=3pt,fill=qcoral,line width=1.0pt,minimum width=1.65cm,minimum height=1.15cm,align=center,font=\small\bfseries] (readout) at (9.92,0.5) {Linear\\readout\\+ sigmoid};
+  \draw[arrow,line width=1.2pt] (8.68,1) -- (readout.west |- 0,0.74);
+  \draw[arrow,line width=1.2pt] (8.68,0) -- (readout.west |- 0,0.26);
+  \node[font=\small\bfseries,align=center] at (2.4,1.60) {Layer 1};
+  \node[font=\small\bfseries,align=center] at (6.0,1.60) {Layer 2};
 \end{tikzpicture}
 \caption{Two-qubit circuit used by the primary QNN. Each layer re-encodes both features. The CNOT control is on $q_0$ and the target is on $q_1$. The depth-1 and depth-3 variants add or remove a full layer.}
 \label{fig:circuit}

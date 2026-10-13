@@ -56,9 +56,9 @@ QDataSet Dynamics & QNN, depth 2 (13p) & \qdatasetHamiltonianQNNdTwoEntAccuracy 
 \subsection{Decision boundaries and learning curves}
 Figure~\ref{fig:boundaries} displays the learned boundaries for all four benchmark tasks on the seed-0 partition. On Iris, both models cleanly partition the linearly separable classes. On Two Moons, the classical MLP constructs a smooth, tightly hugging nonlinear boundary, whereas the depth-2 QNN produces a broader elliptic boundary that misclassifies the inner tips of the crescents. On Concentric Circles, however, the QNN's rotation encoding naturally generates circular level sets, whereas the compact MLP with only two ReLU hidden units cannot isolate the inner circle. On QDataSet 2-Qubit Dynamics, Figure~\ref{fig:boundaries} depicts the 2D projection slice across normalized single-qubit expectation features $\langle XI \rangle$ and $\langle IX \rangle$, demonstrating that both architectures accurately classify the transition boundary between unentangled local drift and bipartite interacting Hamiltonian dynamics.
 
-\begin{figure}[!htbp]
+\begin{figure}[p]
 \centering
-\includegraphics[width=0.96\linewidth,height=0.78\textheight,keepaspectratio]{results/figures/decision_boundaries.png}
+\includegraphics[width=0.96\linewidth,height=0.88\textheight,keepaspectratio]{results/figures/decision_boundaries.png}
 \caption{Decision boundaries for the MLP and depth-2 QNN on the seed-0 split across all four datasets. For QDataSet Dynamics, a 2D projection slice across normalized features is displayed.}
 \label{fig:boundaries}
 \end{figure}
@@ -67,7 +67,7 @@ As shown in Figure~\ref{fig:loss}, both the classical MLP and the variational qu
 
 \begin{figure}[!htbp]
 \centering
-\includegraphics[width=0.98\linewidth]{results/figures/loss_curves.png}
+\includegraphics[width=0.95\linewidth]{results/figures/loss_curves.png}
 \caption{Training binary cross-entropy loss across ten runs (mean $\pm$ 1 SD).}
 \label{fig:loss}
 \end{figure}
@@ -92,7 +92,7 @@ QDataSet Dynamics & \qdatasetHamiltonianQNNdOneEntAccuracy & \qdatasetHamiltonia
 
 \begin{figure}[!htbp]
 \centering
-\includegraphics[width=0.98\linewidth]{results/figures/qnn_ablation.png}
+\includegraphics[width=0.95\linewidth]{results/figures/qnn_ablation.png}
 \caption{QNN depth and entanglement ablation for accuracy and F1-score across all datasets.}
 \label{fig:ablation}
 \end{figure}
@@ -101,7 +101,7 @@ On Concentric Circles, circuit depth reveals an instructive dynamic: depth 1 rea
 
 \begin{figure}[!htbp]
 \centering
-\includegraphics[width=0.98\linewidth]{results/figures/capacity_control.png}
+\includegraphics[width=0.95\linewidth]{results/figures/capacity_control.png}
 \caption{Classical capacity control comparing the compact MLP (9 params), wide MLP (193 params), and depth-2 QNN (7 params).}
 \label{fig:capacity}
 \end{figure}
@@ -127,22 +127,20 @@ QDataSet Dynamics & $0.742\pm0.045$ & $0.743\pm0.046$ & $0.743\pm0.049$\\
 
 \begin{figure}[!htbp]
 \centering
-\includegraphics[width=0.98\linewidth]{results/figures/shot_sensitivity.png}
+\includegraphics[width=0.95\linewidth]{results/figures/shot_sensitivity.png}
 \caption{Evaluation accuracy under exact expectation and simulated 256 and 1,024 measurement shots across all four benchmark datasets.}
 \label{fig:shots}
 \end{figure}
 
-\clearpage
 \subsection{Confusion matrices}
 Figure~\ref{fig:cm} displays the pooled test confusion matrices aggregated across all ten evaluation seeds for the classical MLP and depth-2 QNN across the four benchmark datasets. On Iris, errors are predominantly concentrated along the overlapping boundary between versicolor and virginica, reflecting genuine morphological overlap rather than optimization failure. On Concentric Circles, the compact QNN maintains balanced true-positive and true-negative rates across inner and outer rings, whereas the compact MLP exhibits severe asymmetry due to its inability to isolate the central cluster.
 
 \begin{figure}[p]
 \centering
-\includegraphics[width=0.96\linewidth,height=0.86\textheight,keepaspectratio]{results/figures/confusion_matrices.png}
+\includegraphics[width=0.96\linewidth,height=0.88\textheight,keepaspectratio]{results/figures/confusion_matrices.png}
 \caption{Pooled test confusion matrices and normalized classification distributions across ten repeated splits for all four benchmark datasets.}
 \label{fig:cm}
 \end{figure}
-\clearpage
 
 \subsection{Paired statistical hypothesis tests}
 
