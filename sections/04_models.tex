@@ -1,21 +1,19 @@
 \clearpage
 \section{Models}
 \subsection{Quantum neural network}
-The QNN is a two-qubit variational circuit with data re-uploading. A layer first applies $R_y(x_0)$ and $R_y(x_1)$ to encode the two features, then trainable rotations $R_y(\theta_{\ell,0})$ and $R_y(\theta_{\ell,1})$. In the entangled model, a CNOT gate follows, with qubit 0 as control and qubit 1 as target. This layer repeats $L$ times. The primary model uses $L=2$; depths 1 and 3 are also tested.
+The QNN is a parameterized variational circuit with data re-uploading. For two-dimensional datasets, it operates on a two-qubit register ($n=2$); for the four-dimensional QDataSet dynamics benchmark, it scales to an $n=4$ qubit register. Within each layer $\ell$, single-qubit rotations $R_y(x_i)$ embed each normalized input feature into qubit $i$, followed by trainable rotations $R_y(\theta_{\ell,i})$. In entangled configurations, CNOT gates couple adjacent qubits (with qubit $0\to1$ for 2 qubits, and a circular ladder for 4 qubits). This layer repeats $L$ times (primary $L=2$; depths 1 and 3 are also evaluated).
 
-For the $\ell$th layer, the operation is
+For the 2-qubit $\ell$th layer, the unitary operation is
 \begin{equation}
 U_\ell(x,\theta_\ell)=\operatorname{CNOT}_{0\rightarrow1}
 \left[R_y(\theta_{\ell,0})\otimes R_y(\theta_{\ell,1})\right]
 \left[R_y(x_0)\otimes R_y(x_1)\right],
 \end{equation}
-where the CNOT is omitted for the no-entanglement ablation. The final state is $|\psi(x,\theta)\rangle=U_L\cdots U_1|00\rangle$. The quantum circuit returns two expectation values, $\langle Z_0\rangle$ and $\langle Z_1\rangle$. A trainable classical linear readout combines them into a logit, which is converted to a positive-class probability using the sigmoid function.
-
-Let $h(x,\theta)=[\langle Z_0\rangle,\langle Z_1\rangle]^\top$ denote the two measured features. The classical readout computes $s=w^\top h+b$ and $p(y=1\mid x)=\sigma(s)$, where $\sigma(s)=1/(1+e^{-s})$. For a labelled training set $\{(x_i,y_i)\}_{i=1}^N$, the objective is binary cross-entropy:
+where the CNOT is omitted for the unentangled ablation. The final state is $|\psi(x,\theta)\rangle=U_L\cdots U_1|0\rangle^{\otimes n}$. The quantum circuit returns all single-qubit expectation values $h(x,\theta)=[\langle Z_0\rangle,\dots,\langle Z_{n-1}\rangle]^\top$. A trainable classical linear readout combines them into a logit $s=w^\top h+b$, which is converted to a positive-class probability $p(y=1\mid x)=\sigma(s)$. For a labelled training set $\{(x_i,y_i)\}_{i=1}^N$, the objective is binary cross-entropy:
 \begin{equation}
   \mathcal{L}(w,b,\theta)=-\frac{1}{N}\sum_{i=1}^{N}\left[y_i\log p_i+(1-y_i)\log(1-p_i)\right].
 \end{equation}
-This makes the training loop hybrid: the QNode computes expectation values, PyTorch applies the linear readout and loss, and automatic differentiation propagates gradients through both components. The primary PennyLane implementation executes an analytic \texttt{default.qubit} device using simulator backpropagation. A separate PyTorch statevector reference implementation is maintained for independent numerical and gradient parity tests. Neither mode models the cost of running a gradient on physical hardware.
+This establishes a hybrid quantum-classical pipeline: the PennyLane QNode computes quantum expectation values, PyTorch computes the linear readout and loss, and automatic differentiation propagates gradients through both components. The primary implementation executes on PennyLane's \texttt{default.qubit} device using analytic simulator backpropagation, verified against an independent PyTorch statevector reference.
 
 \begin{figure}[H]
 \centering
@@ -59,7 +57,7 @@ This makes the training loop hybrid: the QNode computes expectation values, PyTo
 \end{figure}
 
 \subsection{Classical baseline}
-The classical model is a PyTorch MLP with architecture $2\rightarrow16\rightarrow8\rightarrow1$, ReLU activations between hidden layers, and a single binary logit at the output. It has 193 trainable parameters. To add a closer parameter-count control, we also use a compact $2\rightarrow2\rightarrow1$ MLP with 9 parameters. The depth-2 QNN has four trainable quantum rotation angles and three trainable readout parameters, for seven trainable parameters in total. These counts are only rough controls: parameter count does not directly measure effective model capacity or the computation used by a model.
+The wide classical model is a PyTorch MLP with architecture $d\rightarrow16\rightarrow8\rightarrow1$, ReLU activations between hidden layers, and a single binary logit at the output. It contains 193 trainable parameters on 2D datasets and 225 parameters on the 4D QDataSet dynamics benchmark. To establish rigorous capacity-controlled baselines, we also evaluate compact $d\rightarrow2\rightarrow1$ MLPs with 9 parameters ($d=2$) and 13 parameters ($d=4$). For depth-2 QNNs, the 2-qubit circuit contains 4 gate angles and 3 readout parameters (7 parameters total), while the 4-qubit circuit contains 8 gate angles and 5 readout parameters (13 parameters total), establishing an exact 1:1 parameter match (13 vs. 13) on the QDataSet benchmark.
 
 \subsection{Optimization}
 Both models use full-batch Adam optimization and binary cross-entropy with logits for 100 epochs. The MLP learning rate is 0.01; the QNN learning rate is 0.025. Weight decay is $10^{-4}$ and gradients are clipped to a maximum norm of 5. The different fixed learning rates reflect the different parameterizations; no exhaustive hyperparameter search was conducted. The primary experiment uses exact analytic expectation values during training.

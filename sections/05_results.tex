@@ -1,6 +1,6 @@
 \clearpage
 \section{Evaluation protocol}
-The primary comparison evaluates the wide MLP versus the depth-2 entangled QNN. Secondary experiments compare QNN depths 1, 2, and 3, compare depth 2 with versus without CNOT, and contrast the QNN against the parameter-matched compact MLP ($2\to2\to1$, 9 parameters). Metrics are accuracy, precision, recall, F1-score, ROC AUC, binary log loss, and measured training time. Scores are reported as mean and sample standard deviation across ten paired runs.
+The primary comparison evaluates the wide MLP versus the depth-2 entangled QNN across all four benchmarks. Secondary experiments compare QNN depths 1, 2, and 3, compare depth 2 with versus without CNOT, and contrast the QNN against parameter-matched compact MLPs ($d\to2\to1$: 9 parameters on 2D datasets, 13 parameters on 4D QDataSet). Metrics are accuracy, precision, recall, F1-score, ROC AUC, binary log loss, and measured training time. Scores are reported as mean and sample standard deviation across ten paired runs.
 
 For model comparisons, paired differences are calculated seed by seed:
 \begin{equation}
