@@ -36,8 +36,16 @@
 \fancyhead[R]{\small Case Study}
 \fancyfoot[C]{\thepage}
 \renewcommand{\headrulewidth}{0.4pt}
-\renewcommand{\footrulewidth}{0pt}
 \sisetup{detect-all,round-mode=places,round-precision=3}
+
+% Float layout optimization to eliminate white space gaps
+\renewcommand{\topfraction}{0.90}
+\renewcommand{\bottomfraction}{0.85}
+\renewcommand{\textfraction}{0.08}
+\renewcommand{\floatpagefraction}{0.80}
+\setlength{\floatsep}{8pt plus 2pt minus 2pt}
+\setlength{\textfloatsep}{10pt plus 2pt minus 3pt}
+\setlength{\intextsep}{8pt plus 2pt minus 2pt}
 
 \definecolor{qblue}{HTML}{D7E8F7}
 \definecolor{qteal}{HTML}{D4EEE5}

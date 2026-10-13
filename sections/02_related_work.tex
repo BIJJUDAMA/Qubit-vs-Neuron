@@ -1,4 +1,3 @@
-\clearpage
 \section{Related work}
 Schuld and Killoran connected quantum learning models with feature maps into Hilbert spaces, formalizing quantum circuits as kernel-style data transformations followed by a measurement-based linear hypothesis [1]. Pérez-Salinas et al. demonstrated that repeatedly encoding classical inputs through multiple circuit layers---termed \emph{data re-uploading}---increases the expressivity of small quantum classifiers, establishing that even single-qubit systems with sufficiently many re-uploading stages can approximate arbitrary continuous functions [2].
 
@@ -12,7 +11,7 @@ Bowles, Ahmed, and Schuld evaluated a wide range of variational quantum classifi
 
 To address the historical scarcity of standardized quantum machine learning benchmarks, Perrier, Youssry, and Ferrie introduced \emph{QDataSet} [6], a comprehensive open-access repository of quantum datasets specifically curated for quantum machine learning research. QDataSet provides experimentally acquired and simulated quantum dynamics, state tomography data, and quantum state classification tasks across multi-qubit systems. As discussed in Section~\ref{sec:frontiers}, such quantum-native datasets constitute the primary regime where quantum neural networks possess a fundamental advantage over classical architectures by bypassing classical measurement bottlenecks.
 
-\begin{table}[H]
+\begin{table}[!htbp]
 \centering\small
 \caption{How prior foundational literature informs our experimental and theoretical framework.}
 \begin{tabularx}{\linewidth}{@{}p{0.24\linewidth}p{0.34\linewidth}X@{}}

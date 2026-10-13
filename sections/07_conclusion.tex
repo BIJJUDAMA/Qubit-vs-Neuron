@@ -1,4 +1,3 @@
-\clearpage
 \section{Discussion: Classical vs Quantum Learning Frontiers}\label{sec:frontiers}
 
 \subsection{Why Classical Neural Networks Overwhelmingly Outperform QNNs on Classical Data}
@@ -50,7 +49,6 @@ To evaluate model performance in a regime where data originates directly from ph
   \item \textbf{Empirical Findings:} On this physical quantum dynamics benchmark, the depth-2 QNN achieves \qdatasetHamiltonianQNNdTwoEntAccuracy{} test accuracy with only 13 trainable parameters, closely matching the capacity-matched compact MLP (\qdatasetHamiltonianMLPSmallAccuracy{}, paired difference $p = 0.265$) while the overparameterized wide MLP reaches \qdatasetHamiltonianMLPAccuracy{}. This demonstrates that in regimes where data reflects quantum unitary symmetries and non-local correlations, parameter-matched QNNs exhibit strong representation capability without suffering degradation.
 \end{enumerate}
 
-\clearpage
 \section{Conclusion}
 This case study conducted a rigorous, reproducible comparison of variational quantum classifiers against classical multilayer perceptrons across four distinct geometric distributions: an overlapping, realistic \emph{Iris} task (\emph{Iris versicolor} vs. \emph{Iris virginica}), the nonlinear \emph{Two Moons} distribution, rotationally symmetric \emph{Concentric Circles}, and physical \emph{QDataSet} two-qubit Hamiltonian dynamics.
 
