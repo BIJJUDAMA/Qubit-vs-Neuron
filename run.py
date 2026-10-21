@@ -2,12 +2,11 @@
 """Unified pipeline runner for the QNN vs MLP case study.
 
 Orchestrates:
-1. Environment verification & dependencies.
-2. Automated test suite execution.
-3. PennyLane & PyTorch model benchmarks across all datasets.
-4. Exporting summary metrics & LaTeX macros.
-5. Automatic download of Tectonic compiler if missing.
-6. Compilation of case_study.pdf.
+1. Automated test suite execution across all datasets and models.
+2. Exploratory Data Analysis (EDA) and model benchmarks across all 6 datasets.
+3. Exporting summary metrics, EDA statistics, & LaTeX macros.
+4. Automatic download of Tectonic compiler if missing.
+5. Compilation of case_study.pdf.
 """
 from __future__ import annotations
 
@@ -83,7 +82,7 @@ def run_pipeline(backend: str = "pennylane", seeds: int = 10, skip_pdf: bool = F
     subprocess.run(test_cmd, cwd=str(ROOT_DIR), check=True)
 
     print("\n" + "=" * 70)
-    print(f"STEP 2: Executing Model Benchmarks (backend={backend}, seeds={seeds})")
+    print(f"STEP 2: Executing EDA & Model Benchmarks (backend={backend}, seeds={seeds})")
     print("=" * 70)
     main_cmd = [
         sys.executable,
@@ -97,10 +96,11 @@ def run_pipeline(backend: str = "pennylane", seeds: int = 10, skip_pdf: bool = F
         "--mlp-epochs",
         "100",
         "--datasets",
-        "iris",
-        "two_moons",
-        "concentric_circles",
-        "qdataset_hamiltonian",
+        "pennylane_tfim",
+        "qiskit_phase_of_matter",
+        "havlicek_adhoc",
+        "breast_cancer",
+        "mnist_digits",
         "--output-dir",
         "results",
     ]

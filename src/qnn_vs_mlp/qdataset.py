@@ -1,4 +1,4 @@
-"""QDataSet 2-Qubit Quantum Dynamics Generator.
+r"""QDataSet 2-Qubit Quantum Dynamics Generator.
 
 Adapted from the QDataSet protocol:
     Perrier, E., Youssry, A. & Ferrie, C.
@@ -20,7 +20,7 @@ import scipy.linalg
 def generate_qdataset_hamiltonian(
     n_samples: int = 500, seed: int = 2026
 ) -> Tuple[np.ndarray, np.ndarray, List[str], str]:
-    """Generate 2-qubit Hamiltonian dynamics classification benchmark.
+    r"""Generate 2-qubit Hamiltonian dynamics classification benchmark.
 
     Classes:
       0: Separable Local Dynamics (no XX interaction, g_int = 0).

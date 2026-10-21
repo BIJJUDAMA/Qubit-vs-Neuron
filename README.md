@@ -1,30 +1,45 @@
 # QNN vs Classical Neural Networks: Reproducible Case Study
 
-This project compares variational quantum classifiers (VQCs) with PyTorch multilayer perceptrons across four diverse binary classification benchmarks:
-1. **Iris** (*Iris versicolor* vs. *Iris virginica*, overlapping petal features).
-2. **Two Moons** (interleaving non-convex crescents with noise $\sigma = 0.25$).
-3. **Concentric Circles** (inner vs. outer rings, rotational inductive bias benchmark).
-4. **QDataSet 2-Qubit Hamiltonian Dynamics** (physical quantum dynamics classifying unentangled local drift vs. entangling $X \otimes X$ interaction).
+This project presents a rigorous empirical and theoretical comparison between variational quantum classifiers (VQCs / QNNs) with data re-uploading and classical multilayer perceptrons (MLPs) across six benchmark datasets organized into three distinct inductive-bias categories:
 
-The package includes a modular scientific architecture (`src/qnn_vs_mlp/`), an automated PennyLane `default.qubit` execution pipeline, paired statistical tests, publication figures, unit tests, and a publication-ready LaTeX manuscript (`case_study.tex` with `sections/`).
+1. **Quantum State & Phase Classification Datasets:**
+   - **PennyLane TFIM:** Transverse-Field Ising Model 1D open chain ($L=4$) ground states across transverse field $h \in [0, 3.0]$. Classifies ordered ferromagnetic ($h < 1.0$) vs. disordered paramagnetic ($h > 1.0$) phases using 4 ground-state Pauli expectation observables ($\langle Z_0 Z_1 \rangle, \langle Z_1 Z_2 \rangle, \langle Z_2 Z_3 \rangle, \langle X_{\text{mean}} \rangle$).
+   - **Qiskit Phase of Matter:** Bond-alternating XXX Heisenberg spin chain ground states (Qiskit ML). Classifies trivial vs. symmetry-protected topological (SPT) phases via 4 PCA ground-state features.
+
+2. **High-Dimensional / Non-Linear Quantum Kernel Datasets:**
+   - **Havlíček Ad-Hoc Benchmark (`ad_hoc_data`):** Havlíček et al. (*Nature* 2019) quantum feature map benchmark with separation gap 0.3. Explicitly constructed to be non-linearly separable by classical hyperplanes while admitting an exact quantum kernel separation via a second-order $ZZ$-feature map.
+   - **Concentric Circles:** Nested circular geometry (factor 0.3, noise 0.05). Directly evaluates rotational trigonometric inductive bias against feedforward ReLU units.
+
+3. **Classical Small-Data & Low-Sample Benchmarks:**
+   - **Breast Cancer Wisconsin (Diagnostic):** Real-world clinical diagnostic dataset (UCI / Scikit-Learn). Reduced from 30 continuous clinical features to 4 principal components ($\approx 80\%$ variance explained), matching a 4-qubit NISQ variational classifier.
+   - **MNIST Digits (0 vs. 1):** Binary handwritten digits downsampled and projected to 4 principal components ($\approx 75\%$ variance explained) in a low-sample regime.
+
+---
+
+## Exploratory Data Analysis (EDA)
+
+Before model training, an automated EDA engine evaluates:
+- Sample and class balance ($N_0 / N_1$)
+- Feature distributional moments (mean, std, min, median, max, skewness, kurtosis)
+- Normalized class separation $S = \|\mu_0 - \mu_1\|_2 / (\bar{\sigma}_0 + \bar{\sigma}_1)$ and Fisher discriminant ratio
+- Inter-feature correlation matrices
+- PCA spectral variance decomposition
+
+EDA metrics are printed in structured tables, written to `results/eda_summary.json`, and plotted in `results/figures/eda_all_datasets.png`.
+
+---
 
 ## Execution & Result Provenance
 
-**All metrics, figures, and tables in `results/` and the compiled PDF manuscript (`case_study.pdf`) are generated from actual PennyLane executions (`backend=pennylane`).**
-- Primary execution uses PennyLane `default.qubit` QNodes with the Torch interface and simulator backpropagation (`qml.device("default.qubit", wires=n_qubits, shots=None)`).
-- An independent PyTorch statevector implementation is maintained for automated parity verification and gradient flow testing (`pytest tests`).
-- Full reproducibility is maintained across 10 paired, stratified train/test splits (seeds 0 through 9). All competing models share identical splits at each seed.
+- **PennyLane execution:** Primary execution uses PennyLane `default.qubit` QNodes with the Torch interface and simulator backpropagation.
+- **Independent PyTorch Statevector:** An independent, fully differentiable $N$-qubit tensor statevector implementation is maintained for offline parity verification and gradient flow testing (`pytest tests`).
+- **Paired splits:** Stratified train/test splits are strictly shared across all competing models for each seed.
 
-## Benchmark Datasets
-
-- **Iris Subset:** Petal length and width comparing *Iris versicolor* vs. *Iris virginica* (100 samples, overlapping boundary).
-- **Two Moons:** 500 samples per seed, noise $\sigma = 0.25$.
-- **Concentric Circles:** 500 samples per seed, factor 0.5, noise 0.08.
-- **QDataSet 2-Qubit Dynamics:** 500 physical state realizations per seed generated from time-dependent Hamiltonian dynamics. Evaluates 4 Pauli expectations ($\langle XI \rangle, \langle IX \rangle, \langle XX \rangle, \langle ZZ \rangle$) to classify separable local evolution vs. bipartite interacting dynamics.
+---
 
 ## One-Command Master Execution
 
-To run the complete pipeline (dependencies check, test suite, PennyLane benchmarks, LaTeX macro updates, and PDF compilation), execute `run.py`:
+To run the complete pipeline (test suite, EDA, PennyLane benchmarks, LaTeX macro updates, and PDF compilation), execute `run.py`:
 
 ```bash
 python run.py
@@ -32,44 +47,34 @@ python run.py
 
 Optional arguments:
 ```bash
-python run.py --seeds 10 --backend pennylane
+python run.py --seeds 5 --backend pennylane
 python run.py --skip-pdf  # Skip LaTeX PDF compilation
 ```
 
+---
+
 ## Repository Structure
 
-- `src/qnn_vs_mlp/`: Clean, modular scientific package:
-  - `models/`: Classical MLPs, PennyLane QNode classifier, and PyTorch statevector reference.
-  - `qdataset.py`: QDataSet physical Hamiltonian dynamics generator.
-  - `configs.py`: Hyperparameter configurations and seed utilities.
-  - `data.py`: Dataset loading and stratified scaling.
+- `src/qnn_vs_mlp/`:
+  - `data.py`: Dataset loading for all 6 benchmarks across the 3 categories.
+  - `eda.py`: Automated Exploratory Data Analysis computation, reports, and visualization.
+  - `models/`: Classical MLPs, PennyLane QNode classifier, and PyTorch multi-qubit statevector reference.
+  - `configs.py`: Dataclass configurations and seed utilities.
   - `training.py`: Model training loops and evaluation metrics.
   - `analysis.py`: Paired statistics and finite-shot measurement simulation.
   - `visualization.py`: Publication figure generation.
   - `reporting.py`: JSON summaries and LaTeX macros.
   - `pipeline.py`: Full experiment execution orchestration.
-- `main.py`: Primary clean CLI entrypoint.
-- `run.py`: Unified cross-platform pipeline runner.
+- `main.py`: Primary CLI entrypoint.
+- `run.py`: Unified pipeline runner.
 - `sections/`: Modular manuscript sections (`00_abstract.tex` through `07_conclusion.tex`).
 - `case_study.tex`: Master LaTeX document.
 - `case_study.pdf`: Compiled case study publication paper.
 - `tests/`: Automated unit and backend parity tests (`pytest tests`).
-- `results/`: Canonical PennyLane experiment artifacts:
-  - `run_metrics.csv`: Run-level metric rows (4 datasets x 10 seeds x 6 models).
+- `results/`:
+  - `eda_summary.json`: Quantitative EDA metrics across all 6 benchmarks.
+  - `run_metrics.csv`: Metric rows across seeds, models, and datasets.
   - `shot_sensitivity.csv`: Finite-shot inference resample results.
   - `summary.json`: Aggregate statistics, paired tests, and execution metadata.
   - `results_macros.tex`: Direct LaTeX macro definitions.
-  - `figures/`: All publication figures (decision boundaries, loss curves, confusion matrices, capacity controls, ablations, shot sensitivity).
-
-## Citations & Attribution
-
-The quantum Hamiltonian dynamics benchmark incorporates the simulation model and open-access protocols of **QDataSet**:
-> **Perrier, E., Youssry, A. & Ferrie, C.**  
-> *"QDataSet, quantum datasets for machine learning."*  
-> *Scientific Data* **9**, 582 (2022).  
-> DOI: [10.1038/s41597-022-01639-1](https://doi.org/10.1038/s41597-022-01639-1)  
-> GitHub: [https://github.com/eperrier/QDataSet](https://github.com/eperrier/QDataSet)
-
-## Claims and Limits
-
-The study is an educational simulator-based case study on classical and quantum-simulated datasets. It does not run on physical quantum hardware and does not establish commercial quantum advantage. Runtime metrics represent software simulation on CPU. The finite-shot experiment samples measurements only at inference; device noise and decoherence are outside scope.
+  - `figures/`: All publication figures (EDA, decision boundaries, loss curves, confusion matrices, capacity controls, ablations, shot sensitivity).

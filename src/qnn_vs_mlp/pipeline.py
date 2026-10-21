@@ -12,6 +12,7 @@ import torch
 from .analysis import eval_shot_readout, paired_stats
 from .configs import RunConfig, set_seed
 from .data import load_dataset, split_and_scale
+from .eda import compute_dataset_eda, print_eda_report, plot_dataset_eda, save_eda_summary
 from .models import (
     CompactMLPClassifier,
     MLPClassifier,
@@ -40,6 +41,7 @@ def run_experiment(
     outdir.mkdir(parents=True, exist_ok=True)
     figures_dir = outdir / "figures"
     figures_dir.mkdir(parents=True, exist_ok=True)
+
     configs = [
         ("QNN_depth1_entangled", "QNN", 1, True),
         ("QNN_depth2_entangled", "QNN", 2, True),
@@ -62,9 +64,56 @@ def run_experiment(
                 "The reference backend is available with --backend torch."
             ) from exc
 
-    datasets_to_run = getattr(cfg, "datasets", ("iris", "two_moons", "concentric_circles"))
+    datasets_to_run = getattr(
+        cfg,
+        "datasets",
+        (
+            "pennylane_tfim",
+            "qiskit_phase_of_matter",
+            "havlicek_adhoc",
+            "breast_cancer",
+            "mnist_digits",
+        ),
+    )
+
+    # =========================================================================
+    # STEP 1: EXPLORATORY DATA ANALYSIS (EDA) BEFORE TRAINING
+    # =========================================================================
+    print("\n" + "=" * 70)
+    print("STEP 1: PERFORMING EXPLORATORY DATA ANALYSIS (EDA) ACROSS BENCHMARKS")
+    print("=" * 70)
+    all_eda = {}
+    eda_dataset_data = {}
+    for d_name in datasets_to_run:
+        ds_eda = load_dataset(
+            d_name, cfg.moons_samples, cfg.moons_noise, data_seed=2026
+        )
+        X_eda, y_eda, labels_eda, desc_eda = ds_eda
+        all_eda[d_name] = compute_dataset_eda(
+            d_name,
+            X_eda,
+            y_eda,
+            labels_eda,
+            desc_eda,
+            feature_names=getattr(ds_eda, "feature_names", None),
+            target_name=getattr(ds_eda, "target_name", None),
+            column_info=getattr(ds_eda, "column_info", None),
+        )
+        eda_dataset_data[d_name] = {"X": X_eda, "y": y_eda}
+
+    print_eda_report(all_eda)
+    save_eda_summary(all_eda, outdir)
+    plot_dataset_eda(all_eda, eda_dataset_data, figures_dir)
+
+    # =========================================================================
+    # STEP 2: EXPERIMENTAL TRAINING & EVALUATION BENCHMARKS
+    # =========================================================================
+    print("\n" + "=" * 70)
+    print(f"STEP 2: EXECUTING MODEL TRAINING & EVALUATION (backend={backend}, seeds={cfg.seeds})")
+    print("=" * 70)
     for dataset_name in datasets_to_run:
         plot_data[dataset_name] = {}
+        d_offset = abs(hash(dataset_name)) % 10000
         for seed in range(cfg.seeds):
             print(f"[{dataset_name}] seed {seed + 1}/{cfg.seeds}", flush=True)
             X, y, labels, description = load_dataset(
@@ -92,7 +141,7 @@ def run_experiment(
                 )
 
             # MLP trained on standardized classical features.
-            set_seed(10000 + seed + (0 if dataset_name == "iris" else 1000))
+            set_seed(10000 + seed + d_offset)
             mlp = MLPClassifier(in_features=n_features)
             mlp_loss, mlp_acc, mlp_time = train_model(
                 mlp, Xtr_t, ytr, cfg.mlp_epochs, cfg.learning_rate_mlp
@@ -117,7 +166,7 @@ def run_experiment(
                 boundary_models[(dataset_name, "MLP")] = mlp
 
             # Compact MLP: parameter-count control close to the depth-2 QNN.
-            set_seed(15000 + seed + (0 if dataset_name == "iris" else 1000))
+            set_seed(15000 + seed + d_offset)
             compact_mlp = CompactMLPClassifier(in_features=n_features)
             _, _, compact_time = train_model(
                 compact_mlp, Xtr_t, ytr, cfg.mlp_epochs, cfg.learning_rate_mlp
@@ -140,7 +189,7 @@ def run_experiment(
                 set_seed(
                     20000
                     + seed
-                    + (0 if dataset_name == "iris" else 1000)
+                    + d_offset
                     + depth * 10
                     + int(entangle)
                 )
@@ -189,7 +238,7 @@ def run_experiment(
                                 + seed * 100
                                 + shot_n
                                 + replicate * 10000
-                                + (20000 if dataset_name == "two_moons" else 0),
+                                + d_offset,
                             )
                             shot_results.append({
                                 "dataset": dataset_name,

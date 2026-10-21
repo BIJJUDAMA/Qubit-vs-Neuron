@@ -16,12 +16,10 @@ from .pennylane import PennyLaneQuantumClassifier
 def build_qnn(backend: str, depth: int, entangle: bool, n_qubits: int = 2):
     if backend == "pennylane":
         return PennyLaneQuantumClassifier(depth=depth, entangle=entangle, n_qubits=n_qubits)
-    if n_qubits == 2:
-        return TorchStatevectorQuantumClassifier(depth=depth, entangle=entangle)
-    raise NotImplementedError(
-        f"Torch statevector reference backend currently supports n_qubits=2 (requested n_qubits={n_qubits}). "
-        "Use --backend pennylane for multi-qubit benchmarks."
-    )
+    elif backend == "torch":
+        return TorchStatevectorQuantumClassifier(depth=depth, entangle=entangle, n_qubits=n_qubits)
+    else:
+        raise ValueError(f"Unknown backend '{backend}'. Choose 'pennylane' or 'torch'.")
 
 
 def count_parameters(model: nn.Module) -> int:

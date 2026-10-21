@@ -1,0 +1,985 @@
+{
+  "pennylane_tfim": {
+    "name": "pennylane_tfim",
+    "display_name": "PennyLane TFIM",
+    "category": "1. Quantum State & Phase Classification",
+    "description": "PennyLane TFIM: Transverse-Field Ising Model 4-spin chain ground states (Ferromagnetic h<1.0 vs Paramagnetic h>1.0, 4 Pauli expectation features)",
+    "n_samples": 66,
+    "n_features": 4,
+    "n_qubits": 4,
+    "class_labels": [
+      "Ferromagnetic",
+      "Paramagnetic"
+    ],
+    "class_counts": {
+      "0": 33,
+      "1": 33
+    },
+    "balance_ratio": 1.0,
+    "feature_names": [
+      "corr_Z0Z1",
+      "corr_Z1Z2",
+      "corr_Z2Z3",
+      "mag_transverse_X"
+    ],
+    "target_name": "magnetic_phase",
+    "target_column": {
+      "column_name": "magnetic_phase",
+      "role": "Target",
+      "dtype": "int64",
+      "non_null_count": 66,
+      "total_count": 66,
+      "unique_values": [
+        0,
+        1
+      ],
+      "class_distribution": {
+        "0": 33,
+        "1": 33
+      },
+      "class_mapping": {
+        "0": "Ferromagnetic",
+        "1": "Paramagnetic"
+      },
+      "meaning": "Ground state magnetic phase (0: Ferromagnetic, 1: Paramagnetic)",
+      "purpose": "Ground-truth phase label across quantum critical point h_c = 1.0"
+    },
+    "columns": [
+      {
+        "column_name": "corr_Z0Z1",
+        "role": "Feature",
+        "dtype": "float32",
+        "non_null_count": 66,
+        "total_count": 66,
+        "mean": 0.5445494651794434,
+        "std": 0.28838205337524414,
+        "min": 0.17743177711963654,
+        "q25": 0.2773733586072922,
+        "median": 0.4951632171869278,
+        "q75": 0.8240093141794205,
+        "max": 1.0,
+        "skewness": 0.3289993405342102,
+        "kurtosis": -1.428083896636963,
+        "meaning": "Longitudinal spin correlation <Z0 Z1> between sites 0 and 1",
+        "purpose": "Measures nearest-neighbor magnetic order along the Z axis"
+      },
+      {
+        "column_name": "corr_Z1Z2",
+        "role": "Feature",
+        "dtype": "float32",
+        "non_null_count": 66,
+        "total_count": 66,
+        "mean": 0.5671197175979614,
+        "std": 0.29652923345565796,
+        "min": 0.18003061413764954,
+        "q25": 0.2862987816333771,
+        "median": 0.5291300415992737,
+        "q75": 0.8742585778236389,
+        "max": 1.0,
+        "skewness": 0.23356175422668457,
+        "kurtosis": -1.5336610078811646,
+        "meaning": "Longitudinal spin correlation <Z1 Z2> between sites 1 and 2",
+        "purpose": "Measures central nearest-neighbor magnetic exchange order"
+      },
+      {
+        "column_name": "corr_Z2Z3",
+        "role": "Feature",
+        "dtype": "float32",
+        "non_null_count": 66,
+        "total_count": 66,
+        "mean": 0.5445494651794434,
+        "std": 0.28838205337524414,
+        "min": 0.17743177711963654,
+        "q25": 0.2773733586072922,
+        "median": 0.4951632171869278,
+        "q75": 0.8240093141794205,
+        "max": 1.0,
+        "skewness": 0.3289993405342102,
+        "kurtosis": -1.428083896636963,
+        "meaning": "Longitudinal spin correlation <Z2 Z3> between sites 2 and 3",
+        "purpose": "Measures nearest-neighbor magnetic order at the chain edge"
+      },
+      {
+        "column_name": "mag_transverse_X",
+        "role": "Feature",
+        "dtype": "float32",
+        "non_null_count": 66,
+        "total_count": 66,
+        "mean": -0.6795784831047058,
+        "std": 0.31431931257247925,
+        "min": -0.9762176275253296,
+        "q25": -0.941379576921463,
+        "median": -0.809661477804184,
+        "q75": -0.45213790982961655,
+        "max": 0.0,
+        "skewness": 0.8429224491119385,
+        "kurtosis": -0.7242629528045654,
+        "meaning": "Mean transverse field magnetization (1/4) sum_{i=0}^3 <X_i>",
+        "purpose": "Measures quantum spin fluctuations driven by transverse field h"
+      }
+    ],
+    "centroid_distance": 1.0310587882995605,
+    "mean_intra_class_std": 0.1264980584383011,
+    "fisher_discriminant_ratio": 25.949443817138672,
+    "normalized_separation": 8.150786814602274,
+    "mean_abs_correlation": 0.9825650867960887,
+    "max_abs_correlation": 1.0,
+    "pca_explained_variance_ratio": [
+      0.9859722852706909,
+      0.013995758257806301,
+      3.195777389919385e-05,
+      1.831115659938224e-17
+    ],
+    "feature_statistics": [
+      {
+        "feature_index": 0,
+        "feature_name": "corr_Z0Z1",
+        "mean": 0.5445494651794434,
+        "std": 0.28838205337524414,
+        "min": 0.17743177711963654,
+        "q25": 0.2773733586072922,
+        "median": 0.4951632171869278,
+        "q75": 0.8240093141794205,
+        "max": 1.0,
+        "skewness": 0.3289993405342102,
+        "kurtosis": -1.428083896636963
+      },
+      {
+        "feature_index": 1,
+        "feature_name": "corr_Z1Z2",
+        "mean": 0.5671197175979614,
+        "std": 0.29652923345565796,
+        "min": 0.18003061413764954,
+        "q25": 0.2862987816333771,
+        "median": 0.5291300415992737,
+        "q75": 0.8742585778236389,
+        "max": 1.0,
+        "skewness": 0.23356175422668457,
+        "kurtosis": -1.5336610078811646
+      },
+      {
+        "feature_index": 2,
+        "feature_name": "corr_Z2Z3",
+        "mean": 0.5445494651794434,
+        "std": 0.28838205337524414,
+        "min": 0.17743177711963654,
+        "q25": 0.2773733586072922,
+        "median": 0.4951632171869278,
+        "q75": 0.8240093141794205,
+        "max": 1.0,
+        "skewness": 0.3289993405342102,
+        "kurtosis": -1.428083896636963
+      },
+      {
+        "feature_index": 3,
+        "feature_name": "mag_transverse_X",
+        "mean": -0.6795784831047058,
+        "std": 0.31431931257247925,
+        "min": -0.9762176275253296,
+        "q25": -0.941379576921463,
+        "median": -0.809661477804184,
+        "q75": -0.45213790982961655,
+        "max": 0.0,
+        "skewness": 0.8429224491119385,
+        "kurtosis": -0.7242629528045654
+      }
+    ],
+    "sparsity": 0.003787878787878788,
+    "correlation_matrix": [
+      [
+        1.0,
+        0.9984367199737448,
+        1.0,
+        0.9709639766947692
+      ],
+      [
+        0.9984367199737447,
+        1.0,
+        0.9984367199737447,
+        0.9565891274395047
+      ],
+      [
+        1.0,
+        0.9984367199737448,
+        1.0,
+        0.9709639766947692
+      ],
+      [
+        0.9709639766947692,
+        0.9565891274395047,
+        0.9709639766947692,
+        1.0
+      ]
+    ]
+  },
+  "qiskit_phase_of_matter": {
+    "name": "qiskit_phase_of_matter",
+    "display_name": "Qiskit Phase of Matter",
+    "category": "1. Quantum State & Phase Classification",
+    "description": "Qiskit Phase of Matter: 4-qubit Heisenberg bond-alternating spin chain (Trivial dimerized phase vs Topological SPT phase, 4 bond correlation observables)",
+    "n_samples": 200,
+    "n_features": 4,
+    "n_qubits": 4,
+    "class_labels": [
+      "Trivial",
+      "Topological"
+    ],
+    "class_counts": {
+      "0": 100,
+      "1": 100
+    },
+    "balance_ratio": 1.0,
+    "feature_names": [
+      "bond_spin_corr_01",
+      "bond_spin_corr_12",
+      "bond_spin_corr_23",
+      "dimer_order_param"
+    ],
+    "target_name": "topological_phase",
+    "target_column": {
+      "column_name": "topological_phase",
+      "role": "Target",
+      "dtype": "int64",
+      "non_null_count": 200,
+      "total_count": 200,
+      "unique_values": [
+        0,
+        1
+      ],
+      "class_distribution": {
+        "0": 100,
+        "1": 100
+      },
+      "class_mapping": {
+        "0": "Trivial",
+        "1": "Topological"
+      },
+      "meaning": "Topological quantum phase (0: Trivial Dimerized, 1: Topological SPT)",
+      "purpose": "Ground-truth quantum many-body topological order label"
+    },
+    "columns": [
+      {
+        "column_name": "bond_spin_corr_01",
+        "role": "Feature",
+        "dtype": "float32",
+        "non_null_count": 200,
+        "total_count": 200,
+        "mean": -0.6139327883720398,
+        "std": 0.13851304352283478,
+        "min": -0.7499998807907104,
+        "q25": -0.7402599900960922,
+        "median": -0.6758826971054077,
+        "q75": -0.4883032962679863,
+        "max": -0.3489895462989807,
+        "skewness": 0.5215571522712708,
+        "kurtosis": -1.2866785526275635,
+        "meaning": "Heisenberg exchange correlation <S0 . S1> on bond 0-1",
+        "purpose": "Measures intra-dimer singlet pairing strength on the first bond"
+      },
+      {
+        "column_name": "bond_spin_corr_12",
+        "role": "Feature",
+        "dtype": "float32",
+        "non_null_count": 200,
+        "total_count": 200,
+        "mean": -0.29562339186668396,
+        "std": 0.21605701744556427,
+        "min": -0.6249470114707947,
+        "q25": -0.5114999264478683,
+        "median": -0.25655287504196167,
+        "q75": -0.08992139622569084,
+        "max": -0.0002704992366489023,
+        "skewness": -0.15317699313163757,
+        "kurtosis": -1.630348801612854,
+        "meaning": "Heisenberg exchange correlation <S1 . S2> on central bond 1-2",
+        "purpose": "Detects inter-dimer coupling across the central lattice junction"
+      },
+      {
+        "column_name": "bond_spin_corr_23",
+        "role": "Feature",
+        "dtype": "float32",
+        "non_null_count": 200,
+        "total_count": 200,
+        "mean": -0.6139327883720398,
+        "std": 0.13851304352283478,
+        "min": -0.7499998807907104,
+        "q25": -0.7402599900960922,
+        "median": -0.6758826971054077,
+        "q75": -0.4883032962679863,
+        "max": -0.3489895462989807,
+        "skewness": 0.5215571522712708,
+        "kurtosis": -1.2866785526275635,
+        "meaning": "Heisenberg exchange correlation <S2 . S3> on bond 2-3",
+        "purpose": "Measures intra-dimer singlet pairing strength on the terminating bond"
+      },
+      {
+        "column_name": "dimer_order_param",
+        "role": "Feature",
+        "dtype": "float32",
+        "non_null_count": 200,
+        "total_count": 200,
+        "mean": -0.4661211371421814,
+        "std": 0.24530018866062164,
+        "min": -0.7498646378517151,
+        "q25": -0.6952993124723434,
+        "median": -0.5476062446832657,
+        "q75": -0.23255334794521332,
+        "max": -0.03651605173945427,
+        "skewness": 0.35960161685943604,
+        "kurtosis": -1.470710039138794,
+        "meaning": "Topological dimerization order parameter (1/2)(<S0.S1> - <S1.S2> + <S2.S3>)",
+        "purpose": "Order parameter explicitly separating trivial and topological SPT ground states"
+      }
+    ],
+    "centroid_distance": 0.6983675956726074,
+    "mean_intra_class_std": 0.06344283372163773,
+    "fisher_discriminant_ratio": 43.22012710571289,
+    "normalized_separation": 11.007823021565208,
+    "mean_abs_correlation": 0.9908148412693606,
+    "max_abs_correlation": 1.0,
+    "pca_explained_variance_ratio": [
+      0.9939613342285156,
+      0.00603870814666152,
+      2.4723756375522044e-09,
+      0.0
+    ],
+    "feature_statistics": [
+      {
+        "feature_index": 0,
+        "feature_name": "bond_spin_corr_01",
+        "mean": -0.6139327883720398,
+        "std": 0.13851304352283478,
+        "min": -0.7499998807907104,
+        "q25": -0.7402599900960922,
+        "median": -0.6758826971054077,
+        "q75": -0.4883032962679863,
+        "max": -0.3489895462989807,
+        "skewness": 0.5215571522712708,
+        "kurtosis": -1.2866785526275635
+      },
+      {
+        "feature_index": 1,
+        "feature_name": "bond_spin_corr_12",
+        "mean": -0.29562339186668396,
+        "std": 0.21605701744556427,
+        "min": -0.6249470114707947,
+        "q25": -0.5114999264478683,
+        "median": -0.25655287504196167,
+        "q75": -0.08992139622569084,
+        "max": -0.0002704992366489023,
+        "skewness": -0.15317699313163757,
+        "kurtosis": -1.630348801612854
+      },
+      {
+        "feature_index": 2,
+        "feature_name": "bond_spin_corr_23",
+        "mean": -0.6139327883720398,
+        "std": 0.13851304352283478,
+        "min": -0.7499998807907104,
+        "q25": -0.7402599900960922,
+        "median": -0.6758826971054077,
+        "q75": -0.4883032962679863,
+        "max": -0.3489895462989807,
+        "skewness": 0.5215571522712708,
+        "kurtosis": -1.2866785526275635
+      },
+      {
+        "feature_index": 3,
+        "feature_name": "dimer_order_param",
+        "mean": -0.4661211371421814,
+        "std": 0.24530018866062164,
+        "min": -0.7498646378517151,
+        "q25": -0.6952993124723434,
+        "median": -0.5476062446832657,
+        "q75": -0.23255334794521332,
+        "max": -0.03651605173945427,
+        "skewness": 0.35960161685943604,
+        "kurtosis": -1.470710039138794
+      }
+    ],
+    "sparsity": 0.0,
+    "correlation_matrix": [
+      [
+        1.0,
+        -0.979598431579857,
+        1.0,
+        0.9960758589558498
+      ],
+      [
+        -0.979598431579857,
+        0.9999999999999999,
+        -0.979598431579857,
+        -0.99354046654475
+      ],
+      [
+        1.0,
+        -0.979598431579857,
+        1.0,
+        0.9960758589558498
+      ],
+      [
+        0.9960758589558497,
+        -0.99354046654475,
+        0.9960758589558497,
+        1.0
+      ]
+    ]
+  },
+  "havlicek_adhoc": {
+    "name": "havlicek_adhoc",
+    "display_name": "Havlicek Ad-Hoc",
+    "category": "2. High-Dimensional / Non-Linear Quantum Kernel",
+    "description": "Havlicek Quantum Kernel Benchmark: ZZFeatureMap non-linearly separable ad-hoc dataset (Nature 2019, 2 qubits, gap=0.3)",
+    "n_samples": 200,
+    "n_features": 2,
+    "n_qubits": 2,
+    "class_labels": [
+      "Class A",
+      "Class B"
+    ],
+    "class_counts": {
+      "0": 100,
+      "1": 100
+    },
+    "balance_ratio": 1.0,
+    "feature_names": [
+      "feature_angle_x1",
+      "feature_angle_x2"
+    ],
+    "target_name": "quantum_kernel_class",
+    "target_column": {
+      "column_name": "quantum_kernel_class",
+      "role": "Target",
+      "dtype": "int64",
+      "non_null_count": 200,
+      "total_count": 200,
+      "unique_values": [
+        0,
+        1
+      ],
+      "class_distribution": {
+        "0": 100,
+        "1": 100
+      },
+      "class_mapping": {
+        "0": "Class A",
+        "1": "Class B"
+      },
+      "meaning": "Quantum feature kernel class (0: Class A, 1: Class B)",
+      "purpose": "Kernel separation label generated via quantum state inner-product gap"
+    },
+    "columns": [
+      {
+        "column_name": "feature_angle_x1",
+        "role": "Feature",
+        "dtype": "float32",
+        "non_null_count": 200,
+        "total_count": 200,
+        "mean": 3.005561590194702,
+        "std": 1.8243030309677124,
+        "min": 0.0,
+        "q25": 1.3823007345199585,
+        "median": 3.078760862350464,
+        "q75": 4.461061477661133,
+        "max": 6.220353603363037,
+        "skewness": -0.00841473788022995,
+        "kurtosis": -1.2226232290267944,
+        "meaning": "First coordinate angle x1 in [0, 2pi] (radians)",
+        "purpose": "Inputs to single-qubit Z rotation and ZZ interaction feature map"
+      },
+      {
+        "column_name": "feature_angle_x2",
+        "role": "Feature",
+        "dtype": "float32",
+        "non_null_count": 200,
+        "total_count": 200,
+        "mean": 3.225472927093506,
+        "std": 1.726536750793457,
+        "min": 0.0,
+        "q25": 1.7592918872833252,
+        "median": 3.267256259918213,
+        "q75": 4.602433204650879,
+        "max": 6.220353603363037,
+        "skewness": -0.10343316197395325,
+        "kurtosis": -1.0117970705032349,
+        "meaning": "Second coordinate angle x2 in [0, 2pi] (radians)",
+        "purpose": "Inputs to single-qubit Z rotation and non-linear ZZ phase coupling"
+      }
+    ],
+    "centroid_distance": 0.5955774188041687,
+    "mean_intra_class_std": 1.7571005821228027,
+    "fisher_discriminant_ratio": 0.05731534957885742,
+    "normalized_separation": 0.33895465147196546,
+    "mean_abs_correlation": 0.038698038015113866,
+    "max_abs_correlation": 0.038698038015113866,
+    "pca_explained_variance_ratio": [
+      0.5336180925369263,
+      0.4663819372653961
+    ],
+    "feature_statistics": [
+      {
+        "feature_index": 0,
+        "feature_name": "feature_angle_x1",
+        "mean": 3.005561590194702,
+        "std": 1.8243030309677124,
+        "min": 0.0,
+        "q25": 1.3823007345199585,
+        "median": 3.078760862350464,
+        "q75": 4.461061477661133,
+        "max": 6.220353603363037,
+        "skewness": -0.00841473788022995,
+        "kurtosis": -1.2226232290267944
+      },
+      {
+        "feature_index": 1,
+        "feature_name": "feature_angle_x2",
+        "mean": 3.225472927093506,
+        "std": 1.726536750793457,
+        "min": 0.0,
+        "q25": 1.7592918872833252,
+        "median": 3.267256259918213,
+        "q75": 4.602433204650879,
+        "max": 6.220353603363037,
+        "skewness": -0.10343316197395325,
+        "kurtosis": -1.0117970705032349
+      }
+    ],
+    "sparsity": 0.0125,
+    "correlation_matrix": [
+      [
+        1.0,
+        0.038698038015113866
+      ],
+      [
+        0.03869803801511387,
+        1.0
+      ]
+    ]
+  },
+  "breast_cancer": {
+    "name": "breast_cancer",
+    "display_name": "Breast Cancer",
+    "category": "3. Classical Small-Data & Low-Sample",
+    "description": "Breast Cancer Wisconsin: 4 clinical cell nucleus morphological features (UCI Diagnostic / Scikit-Learn: radius, texture, perimeter, concave points)",
+    "n_samples": 200,
+    "n_features": 4,
+    "n_qubits": 4,
+    "class_labels": [
+      "Malignant",
+      "Benign"
+    ],
+    "class_counts": {
+      "0": 100,
+      "1": 100
+    },
+    "balance_ratio": 1.0,
+    "feature_names": [
+      "mean_radius",
+      "mean_texture",
+      "mean_perimeter",
+      "mean_concave_points"
+    ],
+    "target_name": "diagnosis",
+    "target_column": {
+      "column_name": "diagnosis",
+      "role": "Target",
+      "dtype": "int64",
+      "non_null_count": 200,
+      "total_count": 200,
+      "unique_values": [
+        0,
+        1
+      ],
+      "class_distribution": {
+        "0": 100,
+        "1": 100
+      },
+      "class_mapping": {
+        "0": "Malignant",
+        "1": "Benign"
+      },
+      "meaning": "Diagnostic biopsy outcome (0: Malignant, 1: Benign)",
+      "purpose": "Ground-truth histopathological cancer diagnosis"
+    },
+    "columns": [
+      {
+        "column_name": "mean_radius",
+        "role": "Feature",
+        "dtype": "float32",
+        "non_null_count": 200,
+        "total_count": 200,
+        "mean": 14.853445053100586,
+        "std": 3.729318618774414,
+        "min": 6.980999946594238,
+        "q25": 12.227499723434448,
+        "median": 14.445000171661377,
+        "q75": 17.36750030517578,
+        "max": 28.110000610351562,
+        "skewness": 0.7350192070007324,
+        "kurtosis": 0.49610447883605957,
+        "meaning": "Mean of distances from cell nucleus center to points on perimeter (micrometers)",
+        "purpose": "Primary indicator of cell nuclear enlargement characteristic of malignancy"
+      },
+      {
+        "column_name": "mean_texture",
+        "role": "Feature",
+        "dtype": "float32",
+        "non_null_count": 200,
+        "total_count": 200,
+        "mean": 19.67259979248047,
+        "std": 4.166474342346191,
+        "min": 10.380000114440918,
+        "q25": 16.490000247955322,
+        "median": 19.859999656677246,
+        "q75": 22.394999504089355,
+        "max": 33.560001373291016,
+        "skewness": 0.21945616602897644,
+        "kurtosis": -0.10328030586242676,
+        "meaning": "Standard deviation of gray-scale pixel values across the cell nucleus",
+        "purpose": "Quantifies chromatin texture heterogeneity inside the cell nucleus"
+      },
+      {
+        "column_name": "mean_perimeter",
+        "role": "Feature",
+        "dtype": "float32",
+        "non_null_count": 200,
+        "total_count": 200,
+        "mean": 97.16099548339844,
+        "std": 25.845943450927734,
+        "min": 43.790000915527344,
+        "q25": 78.50750160217285,
+        "median": 93.86999893188477,
+        "q75": 114.52499961853027,
+        "max": 188.5,
+        "skewness": 0.7757998704910278,
+        "kurtosis": 0.516664981842041,
+        "meaning": "Mean perimeter length of the cell nucleus contour (micrometers)",
+        "purpose": "Captures overall morphological enlargement and boundary irregularity"
+      },
+      {
+        "column_name": "mean_concave_points",
+        "role": "Feature",
+        "dtype": "float32",
+        "non_null_count": 200,
+        "total_count": 200,
+        "mean": 0.056851014494895935,
+        "std": 0.042718641459941864,
+        "min": 0.0,
+        "q25": 0.022690000012516975,
+        "median": 0.0450849998742342,
+        "q75": 0.08490750193595886,
+        "max": 0.2011999934911728,
+        "skewness": 0.9807942509651184,
+        "kurtosis": 0.4274260997772217,
+        "meaning": "Mean number of concave indentations along the cell nucleus contour",
+        "purpose": "Clinically proven biomarker for aggressive nuclear invagination and cancer invasion"
+      }
+    ],
+    "centroid_distance": 36.86619186401367,
+    "mean_intra_class_std": 5.965507507324219,
+    "fisher_discriminant_ratio": 7.635345458984375,
+    "normalized_separation": 6.179891946653637,
+    "mean_abs_correlation": 0.6171238003427028,
+    "max_abs_correlation": 0.997490369166233,
+    "pca_explained_variance_ratio": [
+      0.9782251119613647,
+      0.021678956225514412,
+      9.563240018906072e-05,
+      2.7117127388009976e-07
+    ],
+    "feature_statistics": [
+      {
+        "feature_index": 0,
+        "feature_name": "mean_radius",
+        "mean": 14.853445053100586,
+        "std": 3.729318618774414,
+        "min": 6.980999946594238,
+        "q25": 12.227499723434448,
+        "median": 14.445000171661377,
+        "q75": 17.36750030517578,
+        "max": 28.110000610351562,
+        "skewness": 0.7350192070007324,
+        "kurtosis": 0.49610447883605957
+      },
+      {
+        "feature_index": 1,
+        "feature_name": "mean_texture",
+        "mean": 19.67259979248047,
+        "std": 4.166474342346191,
+        "min": 10.380000114440918,
+        "q25": 16.490000247955322,
+        "median": 19.859999656677246,
+        "q75": 22.394999504089355,
+        "max": 33.560001373291016,
+        "skewness": 0.21945616602897644,
+        "kurtosis": -0.10328030586242676
+      },
+      {
+        "feature_index": 2,
+        "feature_name": "mean_perimeter",
+        "mean": 97.16099548339844,
+        "std": 25.845943450927734,
+        "min": 43.790000915527344,
+        "q25": 78.50750160217285,
+        "median": 93.86999893188477,
+        "q75": 114.52499961853027,
+        "max": 188.5,
+        "skewness": 0.7757998704910278,
+        "kurtosis": 0.516664981842041
+      },
+      {
+        "feature_index": 3,
+        "feature_name": "mean_concave_points",
+        "mean": 0.056851014494895935,
+        "std": 0.042718641459941864,
+        "min": 0.0,
+        "q25": 0.022690000012516975,
+        "median": 0.0450849998742342,
+        "q75": 0.08490750193595886,
+        "max": 0.2011999934911728,
+        "skewness": 0.9807942509651184,
+        "kurtosis": 0.4274260997772217
+      }
+    ],
+    "sparsity": 0.00375,
+    "correlation_matrix": [
+      [
+        1.0,
+        0.3409644856763858,
+        0.997490369166233,
+        0.8245016872595732
+      ],
+      [
+        0.3409644856763858,
+        1.0,
+        0.35234647727316487,
+        0.3321920080262364
+      ],
+      [
+        0.997490369166233,
+        0.35234647727316487,
+        1.0,
+        0.8552477746546231
+      ],
+      [
+        0.8245016872595732,
+        0.3321920080262364,
+        0.8552477746546231,
+        0.9999999999999999
+      ]
+    ]
+  },
+  "mnist_digits": {
+    "name": "mnist_digits",
+    "display_name": "MNIST Digits (0 vs 1)",
+    "category": "3. Classical Small-Data & Low-Sample",
+    "description": "MNIST Digits (0 vs 1): 4 purposeful morphological spatial features (central core, outer ring, vertical spine, horizontal cross; n=200)",
+    "n_samples": 200,
+    "n_features": 4,
+    "n_qubits": 4,
+    "class_labels": [
+      "Digit 0",
+      "Digit 1"
+    ],
+    "class_counts": {
+      "0": 100,
+      "1": 100
+    },
+    "balance_ratio": 1.0,
+    "feature_names": [
+      "center_core_intensity",
+      "outer_perimeter_intensity",
+      "vertical_spine_intensity",
+      "horizontal_cross_intensity"
+    ],
+    "target_name": "digit_label",
+    "target_column": {
+      "column_name": "digit_label",
+      "role": "Target",
+      "dtype": "int64",
+      "non_null_count": 200,
+      "total_count": 200,
+      "unique_values": [
+        0,
+        1
+      ],
+      "class_distribution": {
+        "0": 100,
+        "1": 100
+      },
+      "class_mapping": {
+        "0": "Digit 0",
+        "1": "Digit 1"
+      },
+      "meaning": "Handwritten digit identity (0: Digit 0, 1: Digit 1)",
+      "purpose": "Ground-truth classification target for binary digit recognition"
+    },
+    "columns": [
+      {
+        "column_name": "center_core_intensity",
+        "role": "Feature",
+        "dtype": "float32",
+        "non_null_count": 200,
+        "total_count": 200,
+        "mean": 8.328125,
+        "std": 2.4171230792999268,
+        "min": 2.875,
+        "q25": 6.484375,
+        "median": 8.25,
+        "q75": 10.265625,
+        "max": 13.6875,
+        "skewness": 0.05915196239948273,
+        "kurtosis": -0.743891716003418,
+        "meaning": "Mean pixel intensity in 4x4 central core (rows 2-5, cols 2-5)",
+        "purpose": "Distinguishes hollow ring of digit 0 from solid center of digit 1"
+      },
+      {
+        "column_name": "outer_perimeter_intensity",
+        "role": "Feature",
+        "dtype": "float32",
+        "non_null_count": 200,
+        "total_count": 200,
+        "mean": 3.771979331970215,
+        "std": 0.8476296663284302,
+        "min": 1.7708333730697632,
+        "q25": 3.1041667461395264,
+        "median": 3.8541667461395264,
+        "q75": 4.354166507720947,
+        "max": 5.875,
+        "skewness": -0.008556912653148174,
+        "kurtosis": -0.45052242279052734,
+        "meaning": "Mean pixel intensity along outer boundary ring (border pixels)",
+        "purpose": "Measures annular boundary stroke density characteristic of digit 0"
+      },
+      {
+        "column_name": "vertical_spine_intensity",
+        "role": "Feature",
+        "dtype": "float32",
+        "non_null_count": 200,
+        "total_count": 200,
+        "mean": 9.625937461853027,
+        "std": 3.512777805328369,
+        "min": 4.3125,
+        "q25": 6.484375,
+        "median": 8.625,
+        "q75": 13.34375,
+        "max": 15.875,
+        "skewness": 0.3388829529285431,
+        "kurtosis": -1.3691073656082153,
+        "meaning": "Mean pixel intensity along central vertical spine (cols 3-4)",
+        "purpose": "Directly detects the primary vertical stroke of handwritten digit 1"
+      },
+      {
+        "column_name": "horizontal_cross_intensity",
+        "role": "Feature",
+        "dtype": "float32",
+        "non_null_count": 200,
+        "total_count": 200,
+        "mean": 4.886250019073486,
+        "std": 1.1267218589782715,
+        "min": 2.6875,
+        "q25": 3.9375,
+        "median": 4.75,
+        "q75": 5.75,
+        "max": 7.875,
+        "skewness": 0.3567548096179962,
+        "kurtosis": -0.5678973197937012,
+        "meaning": "Mean pixel intensity along horizontal mid-line (rows 3-4)",
+        "purpose": "Measures horizontal stroke presence across the middle of the image"
+      }
+    ],
+    "centroid_distance": 6.674590587615967,
+    "mean_intra_class_std": 1.3355096578598022,
+    "fisher_discriminant_ratio": 9.975764274597168,
+    "normalized_separation": 4.997785301181844,
+    "mean_abs_correlation": 0.540727533795082,
+    "max_abs_correlation": 0.8605745916536491,
+    "pca_explained_variance_ratio": [
+      0.8276585340499878,
+      0.13856664299964905,
+      0.026551639661192894,
+      0.007223145104944706
+    ],
+    "feature_statistics": [
+      {
+        "feature_index": 0,
+        "feature_name": "center_core_intensity",
+        "mean": 8.328125,
+        "std": 2.4171230792999268,
+        "min": 2.875,
+        "q25": 6.484375,
+        "median": 8.25,
+        "q75": 10.265625,
+        "max": 13.6875,
+        "skewness": 0.05915196239948273,
+        "kurtosis": -0.743891716003418
+      },
+      {
+        "feature_index": 1,
+        "feature_name": "outer_perimeter_intensity",
+        "mean": 3.771979331970215,
+        "std": 0.8476296663284302,
+        "min": 1.7708333730697632,
+        "q25": 3.1041667461395264,
+        "median": 3.8541667461395264,
+        "q75": 4.354166507720947,
+        "max": 5.875,
+        "skewness": -0.008556912653148174,
+        "kurtosis": -0.45052242279052734
+      },
+      {
+        "feature_index": 2,
+        "feature_name": "vertical_spine_intensity",
+        "mean": 9.625937461853027,
+        "std": 3.512777805328369,
+        "min": 4.3125,
+        "q25": 6.484375,
+        "median": 8.625,
+        "q75": 13.34375,
+        "max": 15.875,
+        "skewness": 0.3388829529285431,
+        "kurtosis": -1.3691073656082153
+      },
+      {
+        "feature_index": 3,
+        "feature_name": "horizontal_cross_intensity",
+        "mean": 4.886250019073486,
+        "std": 1.1267218589782715,
+        "min": 2.6875,
+        "q25": 3.9375,
+        "median": 4.75,
+        "q75": 5.75,
+        "max": 7.875,
+        "skewness": 0.3567548096179962,
+        "kurtosis": -0.5678973197937012
+      }
+    ],
+    "sparsity": 0.0,
+    "correlation_matrix": [
+      [
+        1.0,
+        -0.486729692369884,
+        0.7195187550057596,
+        0.8605745916536491
+      ],
+      [
+        -0.486729692369884,
+        1.0,
+        -0.5192761977758307,
+        -0.2287594185668426
+      ],
+      [
+        0.7195187550057597,
+        -0.5192761977758307,
+        1.0,
+        0.42950654739852523
+      ],
+      [
+        0.8605745916536491,
+        -0.2287594185668426,
+        0.42950654739852523,
+        1.0
+      ]
+    ]
+  }
+}

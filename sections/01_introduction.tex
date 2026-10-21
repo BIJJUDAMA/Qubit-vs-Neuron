@@ -6,7 +6,7 @@ Despite considerable enthusiasm, empirical investigations frequently reveal that
 \subsection{Research questions}
 This case study addresses four concrete research questions:
 \begin{enumerate}
-  \item How does a variational quantum classifier compare with classical MLPs across an overlapping botanical distribution (\emph{Iris versicolor} vs. \emph{Iris virginica}), nonlinear irregular clusters (Two Moons), rotationally symmetric geometric structures (Concentric Circles), and physical quantum Hamiltonian dynamics (\emph{QDataSet})?
+  \item How does a variational quantum classifier compare with classical MLPs across three distinct data regimes: quantum-native phase classification (PennyLane TFIM, Qiskit Phase of Matter), high-dimensional non-linear quantum kernels (Havl\'i\v{c}ek ad-hoc benchmark), and classical small-data benchmarks (Breast Cancer, downsampled MNIST)?
   \item Why do classical neural networks overwhelmingly outperform QNNs on generic classical tabular data?
   \item Under what geometric data structures or circuit configurations do QNNs exhibit competitive inductive bias advantages over capacity-constrained classical networks?
   \item What changes when circuit depth is scaled, when entangling gates are removed, or when exact analytic expectations are replaced by finite-shot measurement sampling?
@@ -15,14 +15,14 @@ This case study addresses four concrete research questions:
 \subsection{What this comparison can and cannot show}
 The unit of comparison in this paper is a trained classifier under a specified data split, feature representation, optimization routine, and simulator. It is not a comparison between a physical quantum processor and a CPU. The quantum circuit is simulated classically, and both models run within a classical training loop. This experiment can answer practical questions about decision boundaries, optimization, circuit design, measurement sampling, and inductive bias. It cannot show that quantum hardware reduces computational wall-clock time or computational complexity on classical inputs.
 
-The main practical design choice is to keep the comparison controlled: all models receive identical standardized continuous features ($d=2$ for the classical geometric datasets, $d=4$ Pauli observables for the physical QDataSet Hamiltonian dynamics). The QNN encodes those features as $R_y$ rotation angles; the MLP receives the standardized numeric values. Preprocessing is fit only on training data, and model comparisons reuse the same held-out examples for every seed.
+The main practical design choice is to keep the comparison controlled: all models receive identical standardized continuous features ($d=2$ for 2-qubit kernel benchmarks, $d=4$ for 4-qubit quantum state and PCA-projected small-data benchmarks). The QNN encodes those features as $R_y$ rotation angles; the MLP receives the standardized numeric values. Preprocessing is fit only on training data, and model comparisons reuse the same held-out examples for every seed.
 
 \subsection{Contributions of this case study}
 The study makes five bounded contributions:
 \begin{enumerate}
-  \item Evaluates four contrasting benchmarks spanning classical geometry and simulated quantum physics: an overlapping real-world benchmark (Versicolor vs. Virginica), an irregular nonlinear synthetic benchmark (Two Moons), a radially symmetric benchmark (Concentric Circles), and a physical 2-qubit Hamiltonian dynamics benchmark from QDataSet [6].
-  \item Employs capacity-controlled classical networks (9 parameters for 2D benchmarks, 13 parameters for 4D QDataSet) alongside overparameterized wide MLPs (193 and 225 parameters) to match the parameter budgets of depth-2 QNNs (7 and 13 parameters).
-  \item Isolates circuit depth scaling (depths 1--3) and entanglement ablations (with vs. without CNOT) across all four datasets.
-  \item Formulates the theoretical and empirical principles governing why classical MLPs dominate classical data (non-unitary activations, unconstrained parameter scaling, overparameterization benefits, and absence of barren plateaus) while demonstrating and detailing the domains where quantum models hold empirical parity or potential advantage (quantum-native data from physical experiments and datasets such as QDataSet [6], discrete-log/IQP kernel classes, and group-theoretic parity).
-  \item Provides a fully automated, cross-platform pipeline that executes tests, trains models, directly regenerates LaTeX macros, and compiles the publication PDF.
+  \item Evaluates five contrasting, domain-purposeful benchmarks spanning quantum state classification, non-linear quantum kernels, and classical small-data regimes: PennyLane TFIM, Qiskit Phase of Matter, Havl\'i\v{c}ek ad-hoc kernel, Breast Cancer Wisconsin, and downsampled MNIST digits (0 vs.\ 1).
+  \item Precedes all modeling with automated Exploratory Data Analysis (EDA) quantifying column schemas, data types, target designations, class balance, geometric separation metrics, inter-feature correlations, and PCA spectral dimensionality.
+  \item Employs capacity-controlled classical networks (9 parameters for 2D benchmarks, 13 parameters for 4D benchmarks) alongside overparameterized wide MLPs (193 and 225 parameters) to match the parameter budgets of depth-2 QNNs (7 and 13 parameters).
+  \item Isolates circuit depth scaling (depths 1--3) and entanglement ablations (with vs. without CNOT) across all five datasets.
+  \item Formulates the theoretical and empirical principles governing why classical MLPs dominate classical data while detailing the foundational frontiers where quantum models hold empirical parity or potential advantage.
 \end{enumerate}
