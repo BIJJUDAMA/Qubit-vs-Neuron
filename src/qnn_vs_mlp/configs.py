@@ -14,11 +14,17 @@ class RunConfig:
     mlp_epochs: int = 100
     learning_rate_qnn: float = 0.025
     learning_rate_mlp: float = 0.01
-    moons_samples: int = 500
-    moons_noise: float = 0.25
+    moons_samples: int = 200
+    moons_noise: float = 0.05
     test_size: float = 0.25
     torch_dtype: str = "float32"
-    datasets: tuple = ("iris", "two_moons", "concentric_circles", "qdataset_hamiltonian")
+    datasets: tuple = (
+        "pennylane_tfim",
+        "qiskit_phase_of_matter",
+        "havlicek_adhoc",
+        "breast_cancer",
+        "mnist_digits",
+    )
 
 
 def set_seed(seed: int) -> None:

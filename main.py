@@ -1,14 +1,16 @@
 #!/usr/bin/env python3
-"""Reproducible QNN-vs-MLP case study.
+"""Reproducible QNN-vs-MLP case study across three benchmark categories:
 
-The primary backend is PennyLane default.qubit with a Torch-interface QNode
-(`--backend pennylane`). A separate PyTorch statevector reference backend
-(`--backend torch`) is available for independent circuit-parity checks and for
-reproducing the included results in offline environments. Outputs are always
-tagged with the backend so reference data cannot be mistaken for a PennyLane
-execution.
+1. Quantum State & Phase Classification Datasets:
+   - PennyLane Transverse-Field Ising Model (TFIM)
+   - IBM / Qiskit Phase of Matter (Heisenberg spin chain)
+2. High-Dimensional / Non-Linear Quantum Kernel Datasets:
+   - Havlicek Quantum Feature Map Benchmark (ad_hoc_data)
+3. Classical Small-Data & Low-Sample Benchmarks:
+   - Breast Cancer Wisconsin (Diagnostic)
+   - MNIST Digits (0 vs 1 downsampled/subsetted)
 
-Outputs: run_metrics.csv, summary.json, and figures under --output-dir.
+Outputs: eda_summary.json, run_metrics.csv, summary.json, and figures under --output-dir.
 """
 from __future__ import annotations
 
@@ -33,7 +35,6 @@ from qnn_vs_mlp import (
     count_parameters,
     eval_shot_readout,
     evaluate_model,
-    finite_shot_features,
     load_dataset,
     mean_std,
     paired_stats,
@@ -62,8 +63,17 @@ def main() -> None:
     parser.add_argument(
         "--datasets",
         nargs="+",
-        default=["iris", "two_moons", "concentric_circles", "qdataset_hamiltonian"],
-        help="Datasets to evaluate (choices: iris, two_moons, concentric_circles, qdataset_hamiltonian)",
+        default=[
+            "pennylane_tfim",
+            "qiskit_phase_of_matter",
+            "havlicek_adhoc",
+            "breast_cancer",
+            "mnist_digits",
+        ],
+        help=(
+            "Datasets to evaluate (choices: pennylane_tfim, qiskit_phase_of_matter, "
+            "havlicek_adhoc, breast_cancer, mnist_digits)"
+        ),
     )
     parser.add_argument("--output-dir", default="results")
     args = parser.parse_args()
